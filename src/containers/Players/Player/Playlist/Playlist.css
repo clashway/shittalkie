@@ -1,0 +1,6 @@
+.Playlist {
+  padding: 15px;
+  margin: 25px;
+  border: 1px solid blue;
+  display: inline-block;
+}
