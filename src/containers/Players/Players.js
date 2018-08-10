@@ -41,29 +41,22 @@ class Players extends Component {
           name = 'No alias yet.';
       }
 
-      // This is where we get the player data.
-      const reqPath = 'https://api.fortnitetracker.com/v1/profile/xbl/' + handle;
-      const apiKey = '883c5178-3127-46a1-82b5-f5faad23262c';
-      let config = {
-        headers: {
-          'TRN-Api-Key': apiKey
-        }
-      }
-      Axios.get(reqPath, config).then(function (response) {
+      Axios.get('/api/getPlayer?player=' + handle).then(function (response) {
         console.log(response);
-      });
-      const playerObj = {
-        handle: handle,
-        name: name,
-        games: 3,
-        kills: 5,
-        deaths: 1
-      };
+        const playerObj = {
+          handle: handle,
+          name: name,
+          games: 3,
+          kills: 5,
+          deaths: 1
+        };
 
-      // Add new player to the array to be rendered.
-      return this.setState(prevState => ({
-        players: [...prevState.players, playerObj]
-      }));
+        // Add new player to the array to be rendered.
+        return this.setState(prevState => ({
+          players: [...prevState.players, playerObj]
+        }));
+      });
+
     });
 
   }
