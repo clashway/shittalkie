@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import Aux from '../../hoc/Aux'
 import Player from './Player/Player';
 import classes from './Players.css'
+import Axios from 'axios';
 
 class Players extends Component {
   state = {
     // Handles to retrieve.
     getPlayers: [
       'lash24',
-      'captainobvious13',
-      'daemon chaos',
-      'chapper15',
-      'xvhand of godvx'
+      // 'captainobvious13',
+      // 'daemon chaos',
+      // 'chapper15',
+      // 'xvhand of godvx'
     ],
     // This will be the renderable players array.
     players: []
@@ -41,6 +42,16 @@ class Players extends Component {
       }
 
       // This is where we get the player data.
+      const reqPath = 'https://api.fortnitetracker.com/v1/profile/xbl/' + handle;
+      const apiKey = '883c5178-3127-46a1-82b5-f5faad23262c';
+      let config = {
+        headers: {
+          'TRN-Api-Key': apiKey
+        }
+      }
+      Axios.get(reqPath, config).then(function (response) {
+        console.log(response);
+      });
       const playerObj = {
         handle: handle,
         name: name,
