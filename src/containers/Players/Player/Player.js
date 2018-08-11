@@ -9,11 +9,12 @@ const player = (props) => {
     playlists = props.player.error;
   }
   else {
+    let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
     playlists = (
       <Aux>
-        <Playlist name="solo" playlist={props.player.solo} />
-        <Playlist name="duo" playlist={props.player.duo} />
-        <Playlist name="squad" playlist={props.player.squad} />
+        <Playlist name="solo" playlist={props.player[displayKey].solo} />
+        <Playlist name="duo" playlist={props.player[displayKey].duo} />
+        <Playlist name="squad" playlist={props.player[displayKey].squad} />
       </Aux>
     );
   }

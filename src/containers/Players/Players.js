@@ -15,7 +15,16 @@ class Players extends Component {
       'xvhand of godvx'
     ],
     // This will be the renderable players array.
-    players: []
+    players: [],
+    statsType: 'lastNight'
+  }
+
+  statsToggleHandler = () => {
+    this.setState((prevState) => {
+      return {
+        statsType: prevState.statsType === 'total' ? 'lastNight' : 'total'
+      };
+    });
   }
 
   componentDidMount() {
@@ -57,23 +66,48 @@ class Players extends Component {
         const playerObj = {
           handle: handle,
           name: name,
-          solo: {
-            games: playerData.stats.curr_p2.matches.value,
-            kd: playerData.stats.curr_p2.kd.value,
-            kpg: playerData.stats.curr_p2.kpg.value,
-            wins: playerData.stats.curr_p2.top1.value,
+          currentSeason : {
+            solo: {
+              games: playerData.stats.curr_p2.matches.value,
+              kills: playerData.stats.curr_p2.kills.value,
+              kd: playerData.stats.curr_p2.kd.value,
+              kpg: playerData.stats.curr_p2.kpg.value,
+              wins: playerData.stats.curr_p2.top1.value,
+            },
+            duo: {
+              games: playerData.stats.curr_p10.matches.value,
+              kills: playerData.stats.curr_p10.kills.value,
+              kd: playerData.stats.curr_p10.kd.value,
+              kpg: playerData.stats.curr_p10.kpg.value,
+              wins: playerData.stats.curr_p10.top1.value,
+            },
+            squad: {
+              games: playerData.stats.curr_p9.matches.value,
+              kills: playerData.stats.curr_p9.kills.value,
+              kd: playerData.stats.curr_p9.kd.value,
+              kpg: playerData.stats.curr_p9.kpg.value,
+              wins: playerData.stats.curr_p9.top1.value,
+            }
           },
-          duo: {
-            games: playerData.stats.curr_p10.matches.value,
-            kd: playerData.stats.curr_p10.kd.value,
-            kpg: playerData.stats.curr_p10.kpg.value,
-            wins: playerData.stats.curr_p10.top1.value,
-          },
-          squad: {
-            games: playerData.stats.curr_p9.matches.value,
-            kd: playerData.stats.curr_p9.kd.value,
-            kpg: playerData.stats.curr_p9.kpg.value,
-            wins: playerData.stats.curr_p9.top1.value,
+          lastNight: {
+            solo: {
+              games: playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value,
+              kills: playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value,
+              kpg: Math.round(((playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value) / (playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value)) * 100) / 100,
+              wins: playerData.stats.curr_p2.top1.value - playerData.oldStats.curr_p2.top1.value,
+            },
+            duo: {
+              games: playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value,
+              kills: playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value,
+              kpg: Math.round(((playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value) / (playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value)) * 100) / 100,
+              wins: playerData.stats.curr_p10.top1.value - playerData.oldStats.curr_p10.top1.value,
+            },
+            squad: {
+              games: playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value,
+              kills: playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value,
+              kpg: Math.round(((playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value) / (playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value)) * 100) / 100,
+              wins: playerData.stats.curr_p9.top1.value - playerData.oldStats.curr_p9.top1.value,
+            }
           }
         };
 
@@ -82,18 +116,18 @@ class Players extends Component {
           players: [...prevState.players, playerObj]
         }));
       });
-
     });
-
   }
 
   render() {
     return (
       <Aux>
-        <h2>Fort Nite Season 5 Stats</h2>
+        <h2>Fort Nite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
+        <button onClick={this.statsToggleHandler}>Toggle Stats</button>
+
         <div className={classes.Players}>
           {this.state.players.map(p => {
-            return <Player player={p} key={p.name} />
+            return <Player player={p} displayType={this.state.statsType} key={p.name} />
           })}
         </div>
       </Aux>

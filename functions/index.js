@@ -18,7 +18,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     // Time calculations.
     const ONE_HOUR = 60 * 60 * 1000;
     const ONE_MINUTE = 60 * 1000;
-    const ACCEPTABLE_INTERVAL = 6 * ONE_HOUR;
+    const ACCEPTABLE_INTERVAL = 5 * ONE_MINUTE;
 
     // Get current time.
     let date = new Date();
@@ -32,7 +32,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
         'Content-Type': 'application/json'
       }
     };
-    
+
     let playerRecord = null;
     const playerRef = admin.database().ref(`/playerStats/${pHandle}`);
     return playerRef.on('value', function(data) {
@@ -44,8 +44,20 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Modify the new results for write.
             jsonBody.created = currentTime;
-            jsonBody.oldStats = playerRecord.stats;
-            jsonBody.oldStats.created = playerRecord.created;
+
+            // Every 24 hours update old stats.
+            if (playerRecord.oldStats) {
+              if (currentTime > (playerRecord.oldStats.created + 24 * ONE_HOUR) ) {
+                jsonBody.oldStats = playerRecord.stats;
+                jsonBody.oldStats.created = playerRecord.created;
+                console.log('Replaced old stats.');
+              } else {
+                jsonBody.oldStats = playerRecord.oldStats;
+                console.log('Carried over old stats');
+              }
+            } else {
+              console.log('didnt have oldstats');
+            }
 
             // Write new results.
             playerRef.set(jsonBody);
