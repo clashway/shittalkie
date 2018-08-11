@@ -21,7 +21,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     let date = new Date();
     const currentTime = date.getTime();
 
-    // Set
+    // Request options.
     const pHandle = req.query.player;
     const reqPath = 'https://api.fortnitetracker.com/v1/profile/xbl/' + pHandle;
     const apiKey = '883c5178-3127-46a1-82b5-f5faad23262c';
@@ -44,16 +44,17 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
             // Modify the new results for write.
             jsonBody.created = currentTime;
             jsonBody.oldStats = playerRecord.stats;
+            jsonBody.oldStats.created = playerRecord.created;
 
             // Write new results.
             playerRef.set(jsonBody);
-            console.log('updated existing record');
+            // console.log('updated existing record');
 
             // Return as JSON.
             res.json(jsonBody);
           });
         } else {
-          console.log('returned existing record');
+          // console.log('returned existing record');
           res.json(playerRecord);
         }
       } else {
@@ -61,7 +62,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
           let jsonBody = JSON.parse(body);
           jsonBody.created = currentTime;
           playerRef.set(jsonBody);
-          console.log('wrote new record');
+          // console.log('wrote new record');
           res.json(jsonBody);
         });
       }
