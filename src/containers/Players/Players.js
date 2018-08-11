@@ -90,7 +90,7 @@ class Players extends Component {
   render() {
     return (
       <Aux>
-        <h2>Last Nights Stats</h2>
+        <h2>Fort Nite Season 5 Stats</h2>
         <div className={classes.Players}>
           {this.state.players.map(p => {
             return <Player player={p} key={p.name} />
