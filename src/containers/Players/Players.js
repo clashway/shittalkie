@@ -10,7 +10,7 @@ class Players extends Component {
     getPlayers: [
       'lash24',
       'daemon chaos',
-      'gronky12',
+      // 'gronky12',
       // 'captainobvs13',
       // 'chapper15',
       // 'xvhand of godvx'
@@ -18,7 +18,8 @@ class Players extends Component {
     // This will be the renderable players array.
     players: [],
     statsType: 'total',
-    search: ''
+    search: '',
+    comparePlayers: [],
   }
 
   statsToggleHandler = () => {
@@ -29,9 +30,26 @@ class Players extends Component {
     });
   }
 
+  comparePlayersHandler = (handle) => {
+    const items = [...this.state.comparePlayers];
+    const exists = items.indexOf(handle);
+    if (exists === -1) {
+      if (items.length <= 1) {
+        items.push(handle);
+      }
+    } else {
+      items.splice(exists, 1);
+    }
+    this.setState({comparePlayers: items});
+
+    if (items.length === 2) {
+
+    }
+  }
+
   addPlayerHandler = () => {
     let self = this;
-    const search = this.state.search;
+    const search = this.state.search.toLowerCase();
     const newPlayerPromise = this.lookupPlayer(search);
     newPlayerPromise.then(function(newPlayer) {
       self.setState(prevState => {
@@ -157,7 +175,12 @@ class Players extends Component {
         </div>
         <div className={classes.Players}>
           {this.state.players.map((p, index) => {
-            return <Player player={p} displayType={this.state.statsType} key={p.name + index} />
+            return <Player player={p}
+              displayType={this.state.statsType}
+              key={p.name + index}
+              clicked={this.comparePlayersHandler}
+              comparePlayers={this.state.comparePlayers}
+              />
           })}
         </div>
       </Aux>

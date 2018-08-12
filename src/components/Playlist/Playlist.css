@@ -10,8 +10,14 @@ h3 {
 }
 
 .Label {
-  
+
 }
 .Value {
   float: right;
+}
+
+@media screen and (max-width: 600px) {
+  .Playlist {
+    margin: 9px;
+  }
 }

@@ -18,8 +18,12 @@ const player = (props) => {
       </Aux>
     );
   }
+  let playerClasses = [classes.Player];
+  if (props.comparePlayers.indexOf(props.player.handle) !== -1) {
+    playerClasses.push(classes.Compared);
+  }
   return (
-    <div className={classes.Player}>
+    <div className={playerClasses.join(' ')} onClick={() => props.clicked(props.player.handle)}>
       <div className={classes.Name}>{props.player.name}</div>
       {playlists}
     </div>

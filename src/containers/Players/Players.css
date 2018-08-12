@@ -2,3 +2,9 @@
   width: 80%;
   padding-left: 10%;
 }
+
+@media screen and (max-width: 600px) {
+  .Players {
+    padding: 3%;
+  }
+}
