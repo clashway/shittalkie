@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Player.css';
-import Playlist from './Playlist/Playlist'
-import Aux from '../../../hoc/Aux'
+import Playlist from '../Playlist/Playlist'
+import Aux from '../../hoc/Aux'
 
 const player = (props) => {
   let playlists = null;

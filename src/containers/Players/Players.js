@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from '../../hoc/Aux'
-import Player from './Player/Player';
+import Player from '../../components/Player/Player';
 import classes from './Players.css'
 import Axios from 'axios';
 
