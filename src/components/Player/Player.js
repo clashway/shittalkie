@@ -19,7 +19,7 @@ const player = (props) => {
     );
   }
   let playerClasses = [classes.Player];
-  if (props.comparePlayers.indexOf(props.player.handle) !== -1) {
+  if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
     playerClasses.push(classes.Compared);
   }
   return (

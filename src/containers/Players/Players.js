@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from '../../hoc/Aux'
 import Player from '../../components/Player/Player';
+import ComparePlayers from '../../components/ComparePlayers/ComparePlayers'
 import classes from './Players.css'
 import Axios from 'axios';
 
@@ -165,6 +166,19 @@ class Players extends Component {
   }
 
   render() {
+    let comparePlayersRender = '';
+    if (this.state.comparePlayers.length === 2) {
+      const comparePlayers = this.state.comparePlayers;
+      const currentPlayers = this.state.players;
+      let activeCompare = [];
+      currentPlayers.forEach(function (player) {
+        if (comparePlayers.indexOf(player.handle) !== -1) {
+          activeCompare.push(player);
+        }
+      });
+      comparePlayersRender = <ComparePlayers players={activeCompare} statsType={this.state.statsType} />;
+    }
+
     return (
       <Aux>
         <h2 onClick={this.statsToggleHandler}>Fort Nite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
@@ -173,6 +187,7 @@ class Players extends Component {
           <input type="text" value={this.state.search} onChange={this.searchFieldHandler} />
           <button onClick={this.addPlayerHandler}>Search</button>
         </div>
+        { comparePlayersRender }
         <div className={classes.Players}>
           {this.state.players.map((p, index) => {
             return <Player player={p}
