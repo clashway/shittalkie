@@ -18,7 +18,8 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     // Time calculations.
     const ONE_HOUR = 60 * 60 * 1000;
     const ONE_MINUTE = 60 * 1000;
-    const ACCEPTABLE_INTERVAL = 5 * ONE_MINUTE;
+    const UPDATE_OLD_STATS_INTERVAL = 24 * ONE_HOUR;
+    const UPDATE_LIVE_STATS_INTERVAL = 15 * ONE_MINUTE;
 
     // Get current time.
     let date = new Date();
@@ -38,7 +39,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     return playerRef.on('value', function(data) {
       if (data.exists()) {
         playerRecord = data.val();
-        if (currentTime > (playerRecord.created + ACCEPTABLE_INTERVAL)) {
+        if (currentTime > (playerRecord.created + UPDATE_LIVE_STATS_INTERVAL)) {
           request.get(options, function (error, response, body) {
             let jsonBody = JSON.parse(body);
 
@@ -47,7 +48,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Every 24 hours update old stats.
             if (playerRecord.oldStats) {
-              if (currentTime > (playerRecord.oldStats.created + 1 * ONE_MINUTE) ) {
+              if (currentTime > (playerRecord.oldStats.created + UPDATE_OLD_STATS_INTERVAL) ) {
                 jsonBody.oldStats = playerRecord.stats;
                 jsonBody.oldStats.created = playerRecord.created;
                 console.log('Replaced old stats.');
