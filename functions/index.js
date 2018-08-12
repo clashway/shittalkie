@@ -10,7 +10,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     // Set Response options.
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-    res.status(200);
+    // res.status(200);
 
     // Set the query string.
     const pHandle = req.query.player;
@@ -19,7 +19,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     const ONE_HOUR = 60 * 60 * 1000;
     const ONE_MINUTE = 60 * 1000;
     const UPDATE_OLD_STATS_INTERVAL = 24 * ONE_HOUR;
-    const UPDATE_LIVE_STATS_INTERVAL = 15 * ONE_MINUTE;
+    const UPDATE_LIVE_STATS_INTERVAL = 1 * ONE_HOUR;
 
     // Get current time.
     let date = new Date();

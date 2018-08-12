@@ -1,5 +1,4 @@
-/* .Players {
-  margin: auto;
-  width: 50%;
-  justify-content: center;
-} */
+.Players {
+  width: 80%;
+  padding-left: 10%;
+}

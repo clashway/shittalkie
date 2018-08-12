@@ -34,10 +34,8 @@ class Players extends Component {
     const search = this.state.search;
     const newPlayerPromise = this.lookupPlayer(search);
     newPlayerPromise.then(function(newPlayer) {
-      self.setState((prevState) => {
-        let playerList = [...prevState.players];
-        playerList.push(newPlayer);
-        return {players: playerList};
+      self.setState(prevState => {
+        return {players: [...prevState.players, newPlayer]}
       });
     });
   }
@@ -138,95 +136,12 @@ class Players extends Component {
 
   componentDidMount() {
     this.state.getPlayers.map((handle, index) => {
-      let name = null;
-      switch(handle) {
-        case 'captainobvs13':
-          name = 'Cappy';
-          break;
-        case 'daemon chaos':
-          name = 'Wes';
-          break;
-        case 'lash24':
-          name = 'Lash';
-          break;
-        case 'xvhand of godvx':
-          name = 'Plage';
-          break;
-        case 'chapper15':
-          name = 'Chap';
-          break;
-        case 'gronky12':
-          name = 'GronkyHD';
-          break;
-        default:
-          name = handle;
-      }
-      const reqPath = "https://shitalkie-591a0.firebaseapp.com/api/getPlayer?player=";
-      // const reqPath = '/api/getPlayer?player=';
-      return Axios.get(reqPath + handle).then((response) => {
-        const playerData = response.data;
-        if (playerData.error) {
-          this.setState(prevState => ({
-            players: [...prevState.players, {
-              handle: handle,
-              name: name,
-              error: playerData.error
-            }]
-          }));
-          return false;
-        }
-        const playerObj = {
-          handle: handle,
-          name: name,
-          currentSeason : {
-            solo: {
-              games: playerData.stats.curr_p2.matches.value,
-              kills: playerData.stats.curr_p2.kills.value,
-              kd: playerData.stats.curr_p2.kd.value,
-              kpg: playerData.stats.curr_p2.kpg.value,
-              wins: playerData.stats.curr_p2.top1.value,
-            },
-            duo: {
-              games: playerData.stats.curr_p10.matches.value,
-              kills: playerData.stats.curr_p10.kills.value,
-              kd: playerData.stats.curr_p10.kd.value,
-              kpg: playerData.stats.curr_p10.kpg.value,
-              wins: playerData.stats.curr_p10.top1.value,
-            },
-            squad: {
-              games: playerData.stats.curr_p9.matches.value,
-              kills: playerData.stats.curr_p9.kills.value,
-              kd: playerData.stats.curr_p9.kd.value,
-              kpg: playerData.stats.curr_p9.kpg.value,
-              wins: playerData.stats.curr_p9.top1.value,
-            }
-          },
-          lastNight: {
-            solo: {
-              games: playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value,
-              kills: playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value) / (playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p2.top1.value - playerData.oldStats.curr_p2.top1.value,
-            },
-            duo: {
-              games: playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value,
-              kills: playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value) / (playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p10.top1.value - playerData.oldStats.curr_p10.top1.value,
-            },
-            squad: {
-              games: playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value,
-              kills: playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value) / (playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p9.top1.value - playerData.oldStats.curr_p9.top1.value,
-            }
-          }
-        };
-
-        // Add new player to the array to be rendered.
-        this.setState(prevState => ({
-          players: [...prevState.players, playerObj]
-        }));
+      const newPlayerPromise = this.lookupPlayer(handle);
+      let self = this;
+      return newPlayerPromise.then(function(newPlayer) {
+        self.setState(prevState => {
+          return {players: [...prevState.players, newPlayer]}
+        });
       });
     });
   }
