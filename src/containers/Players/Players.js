@@ -9,14 +9,14 @@ class Players extends Component {
     // Handles to retrieve.
     getPlayers: [
       'lash24',
-      'captainobvs13',
       'daemon chaos',
-      'chapper15',
-      'xvhand of godvx'
+      // 'captainobvs13',
+      // 'chapper15',
+      // 'xvhand of godvx'
     ],
     // This will be the renderable players array.
     players: [],
-    statsType: 'lastNight'
+    statsType: 'total'
   }
 
   statsToggleHandler = () => {

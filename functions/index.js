@@ -47,7 +47,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Every 24 hours update old stats.
             if (playerRecord.oldStats) {
-              if (currentTime > (playerRecord.oldStats.created + 24 * ONE_HOUR) ) {
+              if (currentTime > (playerRecord.oldStats.created + 1 * ONE_MINUTE) ) {
                 jsonBody.oldStats = playerRecord.stats;
                 jsonBody.oldStats.created = playerRecord.created;
                 console.log('Replaced old stats.');
@@ -61,21 +61,22 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Write new results.
             playerRef.set(jsonBody);
-            // console.log('updated existing record');
+            console.log('updated existing record');
 
             // Return as JSON.
             res.json(jsonBody);
           });
         } else {
-          // console.log('returned existing record');
+          console.log('returned existing record');
           res.json(playerRecord);
         }
       } else {
         request.get(options, function (error, response, body) {
           let jsonBody = JSON.parse(body);
           jsonBody.created = currentTime;
+          jsonBody.oldStats = jsonBody.stats;
           playerRef.set(jsonBody);
-          // console.log('wrote new record');
+          console.log('wrote new record');
           res.json(jsonBody);
         });
       }
