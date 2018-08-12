@@ -19,7 +19,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     const ONE_HOUR = 60 * 60 * 1000;
     const ONE_MINUTE = 60 * 1000;
     const UPDATE_OLD_STATS_INTERVAL = 24 * ONE_HOUR;
-    const UPDATE_LIVE_STATS_INTERVAL = 1 * ONE_HOUR;
+    const UPDATE_LIVE_STATS_INTERVAL = 15 * ONE_MINUTE;
 
     // Get current time.
     let date = new Date();
