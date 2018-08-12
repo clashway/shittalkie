@@ -78,6 +78,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
           jsonBody.oldStats = {};
           if (jsonBody.stats) {
             jsonBody.oldStats = jsonBody.stats;
+            jsonBody.oldStats.created = jsonBody.created;
           }
           playerRef.set(jsonBody);
           console.log('wrote new record');

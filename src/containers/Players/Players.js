@@ -105,6 +105,7 @@ class Players extends Component {
           handle: handle,
           name: name,
           currentSeason : {
+            updated: playerData.created,
             solo: {
               games: playerData.stats.curr_p2.matches.value,
               kills: playerData.stats.curr_p2.kills.value,
@@ -128,6 +129,7 @@ class Players extends Component {
             }
           },
           lastNight: {
+            updated: playerData.oldStats.created,
             solo: {
               games: playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value,
               kills: playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value,
