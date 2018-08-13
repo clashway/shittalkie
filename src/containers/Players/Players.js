@@ -185,7 +185,7 @@ class Players extends Component {
 
     return (
       <Aux>
-        <h2 onClick={this.statsToggleHandler}>Fort Nite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
+        <h2 onClick={this.statsToggleHandler}>Fortnite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
         <div>
           <label>Add Player:</label>
           <input type="text" value={this.state.search} onChange={this.searchFieldHandler} />
