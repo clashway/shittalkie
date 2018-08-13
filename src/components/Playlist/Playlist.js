@@ -1,17 +1,61 @@
 import React from 'react';
 import classes from './Playlist.css'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 const playlist = (props) => {
   return (
     <div className={classes.Playlist}>
       <h3>{props.name}</h3>
-      <div>
-        <div><span className={classes.Label}>games:</span><span className={classes.Value}>{props.playlist.games}</span></div>
-        <div><span className={classes.Label}>kills:</span><span className={classes.Value}>{props.playlist.kills}</span></div>
-        <div><span className={classes.Label}>k/g:</span><span className={classes.Value}>{isNaN(props.playlist.kpg) ? 0 : props.playlist.kpg}</span></div>
-        <div><span className={classes.Label}>wins:</span><span className={classes.Value}>{props.playlist.wins}</span></div>
-        {props.playlist.kd ? <div><span className={classes.Label}>k/d:</span><span className={classes.Value}>{props.playlist.kd}</span></div> : null }
-      </div>
+      <Table>
+        <TableBody>
+          <TableRow key="games">
+            <TableCell component="th" scope="row">
+              games
+            </TableCell>
+            <TableCell numeric>
+              {props.playlist.games}
+            </TableCell>
+          </TableRow>
+          <TableRow key="kills">
+            <TableCell component="th" scope="row">
+              kills
+            </TableCell>
+            <TableCell numeric>
+              {props.playlist.kills}
+            </TableCell>
+          </TableRow>
+          <TableRow key="kpg">
+            <TableCell component="th" scope="row">
+              kills/game
+            </TableCell>
+            <TableCell numeric>
+              {isNaN(props.playlist.kpg) ? 0 : props.playlist.kpg}
+            </TableCell>
+          </TableRow>
+          <TableRow key="wins">
+            <TableCell component="th" scope="row">
+              wins
+            </TableCell>
+            <TableCell numeric>
+              {props.playlist.wins}
+            </TableCell>
+          </TableRow>
+          {
+            props.playlist.kd ?
+              <TableRow key="kd">
+                <TableCell component="th" scope="row">
+                  kills/deaths
+                </TableCell>
+                <TableCell numeric>
+                  {props.playlist.kd}
+                </TableCell>
+              </TableRow> : null
+          }
+        </TableBody>
+      </Table>
     </div>
   );
 }

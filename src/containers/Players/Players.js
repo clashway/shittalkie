@@ -4,6 +4,8 @@ import Player from '../../components/Player/Player';
 import ComparePlayers from '../../components/ComparePlayers/ComparePlayers'
 import classes from './Players.css'
 import Axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 class Players extends Component {
   state = {
@@ -187,18 +189,25 @@ class Players extends Component {
         <div>
           <label>Add Player:</label>
           <input type="text" value={this.state.search} onChange={this.searchFieldHandler} />
-          <button onClick={this.addPlayerHandler}>Search</button>
+          <Button variant="contained" color="primary" onClick={this.addPlayerHandler}>Search</Button>
         </div>
         { comparePlayersRender }
         <div className={classes.Players}>
-          {this.state.players.map((p, index) => {
-            return <Player player={p}
-              displayType={this.state.statsType}
-              key={p.name + index}
-              clicked={this.comparePlayersHandler}
-              comparePlayers={this.state.comparePlayers}
-              />
-          })}
+          <Grid container
+            justify="center"
+            direction="column"
+            alignItems="center"
+            spacing={24}
+            >
+            {this.state.players.map((p, index) => {
+              return <Grid item key={p.name + index}><Player player={p}
+                displayType={this.state.statsType}
+                clicked={this.comparePlayersHandler}
+                comparePlayers={this.state.comparePlayers}
+                /></Grid>
+            })}
+          </Grid>
+
         </div>
       </Aux>
     );
