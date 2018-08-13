@@ -60,7 +60,7 @@ const player = (props) => {
   }
   let playerClasses = [classes.Player];
   if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
-    playerClasses.push(classes.Compared);
+    playerClasses = [classes.Compared];
   }
   return (
     <div className={playerClasses.join(' ')} onClick={props.clicked ? () => props.clicked(props.player.handle) : null}>

@@ -1,5 +1,5 @@
-.Player {
-
+.Player:hover {
+  background-color: #c1d5e8;
 }
 .Compared {
   background-color: #9ac1e6;
