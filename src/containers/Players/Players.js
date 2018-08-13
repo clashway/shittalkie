@@ -222,7 +222,7 @@ class Players extends Component {
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary">
           {this.state.statsType === 'total' ? 'S5 Totals' : 'Last 24 Hours'}
         </Button>
-        { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off">
+        { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField
             className={classes.SearchField}
             label="Search Player:"
