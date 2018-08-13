@@ -8,6 +8,7 @@
 }
 .SearchArea {
   margin-bottom: 20px;
+  display: block;
 }
 .SearchButton {
   padding-left: 5px;
