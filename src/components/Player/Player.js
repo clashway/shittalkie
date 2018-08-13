@@ -34,31 +34,20 @@ const player = (props) => {
       );
     }
     else {
-      playlists = (
-        <Aux>
-          <Grid item md={4}>
+      playlists = [];
+      Object.keys(props.player[displayKey]).forEach(function(playlistKey) {
+        if (playlistKey === 'updated') {
+          return;
+        }
+        playlists.push(<Grid item md={4} key={playlistKey}>
             <Card>
               <CardContent>
-                <Playlist name="solo" playlist={props.player[displayKey].solo} />
+                <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={4}>
-            <Card>
-              <CardContent>
-                <Playlist name="duo" playlist={props.player[displayKey].duo} />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item md={4}>
-            <Card>
-              <CardContent>
-                <Playlist name="squad" playlist={props.player[displayKey].squad} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Aux>
-      );
+        );
+      });
     }
   }
   let playerClasses = [classes.Player];
