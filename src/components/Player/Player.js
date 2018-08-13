@@ -48,7 +48,7 @@ const player = (props) => {
           return;
         }
         playlists.push(<Grid item md={itemSize} key={playlistKey}>
-            <Card>
+            <Card classes={{root: classes.Card}} raised={false}>
               <CardContent>
                 <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
               </CardContent>

@@ -17,8 +17,8 @@ class Players extends Component {
       'daemon chaos',
       'xvhand of godvx',
       'captainobvs13',
+      'chapper_15',
       // 'gronky12',
-      // 'chapper15',
     ],
     // This will be the renderable players array.
     players: [],
@@ -95,7 +95,7 @@ class Players extends Component {
       case 'xvhand of godvx':
         name = 'Plage';
         break;
-      case 'chapper15':
+      case 'chapper_15':
         name = 'Chap';
         break;
       case 'gronky12':
@@ -248,12 +248,12 @@ class Players extends Component {
             spacing={24}
             >
             {this.state.players.map((p, index) => {
-              return <Grid item key={p.name + index}>
-                      <Player player={p}
-                        displayType={this.state.statsType}
-                        clicked={this.comparePlayersHandler}
-                        comparePlayers={this.state.comparePlayers}
-                        />
+              return <Grid item xs={12} key={p.name + index} zeroMinWidth>
+                        <Player player={p}
+                          displayType={this.state.statsType}
+                          clicked={this.comparePlayersHandler}
+                          comparePlayers={this.state.comparePlayers}
+                          />
                     </Grid>
             })}
           </Grid>
