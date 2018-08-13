@@ -1,10 +1,3 @@
-/* .Players {
-  width: 80%;
-  padding-left: 10%;
+.MainTitle:hover {
+  text-decoration: underline;
 }
-
-@media screen and (max-width: 600px) {
-  .Players {
-    padding: 3%;
-  }
-} */

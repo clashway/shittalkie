@@ -6,6 +6,7 @@ import classes from './Players.css'
 import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 
 class Players extends Component {
   state = {
@@ -65,6 +66,12 @@ class Players extends Component {
     this.setState({
       search: event.target.value
     });
+  }
+
+  searchKeyPressHandler = (event) => {
+    if (event.key === 'Enter') {
+      this.addPlayerHandler();
+    }
   }
 
   lookupPlayer = (handle) => {
@@ -185,10 +192,16 @@ class Players extends Component {
 
     return (
       <Aux>
-        <h2 onClick={this.statsToggleHandler}>Fortnite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
+        <h2 className={classes.MainTitle} onClick={this.statsToggleHandler}>Fortnite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
         <div>
-          <label>Add Player:</label>
-          <input type="text" value={this.state.search} onChange={this.searchFieldHandler} />
+          <TextField
+            label="Search Player:"
+            placeholder="xbox handle"
+            value={this.state.search}
+            onChange={this.searchFieldHandler}
+            onKeyPress={this.searchKeyPressHandler}
+            margin="normal"
+            />
           <Button variant="contained" color="primary" onClick={this.addPlayerHandler}>Search</Button>
         </div>
         { comparePlayersRender }

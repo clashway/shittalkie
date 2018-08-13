@@ -22,21 +22,21 @@ const player = (props) => {
     let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
     playlists = (
       <Aux>
-        <Grid item xs={4}>
+        <Grid item md={4}>
           <Card>
             <CardContent>
               <Playlist name="solo" playlist={props.player[displayKey].solo} />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item md={4}>
           <Card>
             <CardContent>
               <Playlist name="duo" playlist={props.player[displayKey].duo} />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item md={4}>
           <Card>
             <CardContent>
               <Playlist name="squad" playlist={props.player[displayKey].squad} />
@@ -54,10 +54,10 @@ const player = (props) => {
     <div className={playerClasses.join(' ')} onClick={() => props.clicked(props.player.handle)}>
       <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
-          <Typography align="center" gutterBottom>
+          <Typography align="center" variant="title" gutterBottom>
             {props.player.name}
           </Typography>
-          {rangeString !== '' ? <Typography color="inherit" gutterBottom>({rangeString})</Typography> : null }
+          {rangeString !== '' ? <Typography variant="caption" gutterBottom>({rangeString})</Typography> : null }
         </Grid>
         {playlists}
       </Grid>
