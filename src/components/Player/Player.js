@@ -23,7 +23,7 @@ const player = (props) => {
     if (props.playlistFilter) {
       playlists = (
         <Aux>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Card>
               <CardContent>
                 <Playlist name={props.playlistFilter} playlist={props.player[displayKey][props.playlistFilter]} />
@@ -67,7 +67,7 @@ const player = (props) => {
   }
   return (
     <div className={playerClasses.join(' ')} onClick={props.clicked ? () => props.clicked(props.player.handle) : null}>
-      <Grid container spacing={8} justify="center">
+      <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
           <Typography align="center" variant="title" gutterBottom>
             {props.player.name}

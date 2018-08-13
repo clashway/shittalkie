@@ -11,7 +11,7 @@ const comparePlayers = (props) => {
       <h2>{player1.name} vs {player2.name}</h2>
       <Grid container spacing={8} justify="center">
         {props.players.map((p, index) => {
-          return <Grid item lg={6} key={p.name + index}>
+          return <Grid item sm={6} md={props.playlistFilter ? 6 : 12} key={p.name + index}>
             <Player
               player={p}
               displayType={props.statsType}
