@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './ComparePlayers.css';
-import Player from '../Player/Player';
+import ComparePlayer from './ComparePlayer/ComparePlayer';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -27,8 +27,8 @@ const comparePlayers = (props) => {
 
       <Grid container spacing={8} justify="center">
         {props.players.map((p, index) => {
-          return <Grid item sm={6} md={props.playlistFilter ? 6 : 12} key={p.name + index}>
-            <Player
+          return <Grid item sm={6} md={props.playlistFilter ? 6 : 12} lg={6} key={p.name + index}>
+            <ComparePlayer
               player={p}
               displayType={props.statsType}
               playlistFilter={props.playlistFilter}
