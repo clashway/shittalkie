@@ -1,3 +1,18 @@
 .ComparePlayers {
   padding-bottom: 50px;
 }
+.CompareTitle {
+  display:inline-block;
+  padding-left: 166px;
+  padding-right: 50px;
+}
+.PlaylistFilter {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  .CompareTitle {
+    display: block;
+    padding: 0;
+  }
+}

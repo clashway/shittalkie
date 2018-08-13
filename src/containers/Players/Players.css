@@ -1,3 +1,17 @@
+.MainTitle {
+  display: inline-block;
+  margin-right: 10px;
+  /* margin-bottom: -2px; */
+}
 .MainTitle:hover {
   text-decoration: underline;
+}
+.SearchArea {
+  margin-bottom: 20px;
+}
+.SearchButton {
+  padding-left: 5px;
+}
+.SearchField {
+  padding-right: 5px;
 }

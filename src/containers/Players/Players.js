@@ -4,9 +4,9 @@ import Player from '../../components/Player/Player';
 import ComparePlayers from '../../components/ComparePlayers/ComparePlayers'
 import classes from './Players.css'
 import Axios from 'axios';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 class Players extends Component {
   state = {
@@ -192,23 +192,32 @@ class Players extends Component {
         players={activeCompare}
         statsType={this.state.statsType}
         playlistFilter={this.state.playlistFilter}
-        changed={this.playlistFilterHandler} />;
+        changed={this.playlistFilterHandler}
+        gutterBottom />;
     }
 
     return (
       <Aux>
-        <h2 className={classes.MainTitle} onClick={this.statsToggleHandler}>Fortnite Stats ({this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'})</h2>
-        <div>
+        <h2 className={classes.MainTitle}>Fortnite Stats</h2>
+        <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary">
+          {this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'}
+        </Button>
+        <form className={classes.SearchArea} noValidate autoComplete="off">
           <TextField
+            className={classes.SearchField}
             label="Search Player:"
             placeholder="xbox handle"
             value={this.state.search}
             onChange={this.searchFieldHandler}
             onKeyPress={this.searchKeyPressHandler}
-            margin="normal"
             />
-          <Button variant="contained" color="primary" onClick={this.addPlayerHandler}>Search</Button>
-        </div>
+          <Button
+            className={classes.SearchButton}
+            variant="contained"
+            color="primary"
+            onClick={this.addPlayerHandler}>Search
+          </Button>
+        </form>
 
         { comparePlayersRender }
         <div className={classes.Players}>
