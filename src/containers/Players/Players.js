@@ -51,13 +51,18 @@ class Players extends Component {
     }
   }
 
+  comparePlaylistsHandler = (handle, playlist) => {
+    console.log(handle, playlist);
+    return false;
+  }
+
   addPlayerHandler = () => {
     let self = this;
     const search = this.state.search.toLowerCase();
     const newPlayerPromise = this.lookupPlayer(search);
     newPlayerPromise.then(function(newPlayer) {
       self.setState(prevState => {
-        return {players: [...prevState.players, newPlayer]}
+        return {players: [newPlayer, ...prevState.players]}
       });
     });
   }
