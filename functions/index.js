@@ -57,6 +57,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
                 console.log('Carried over old stats');
               }
             } else {
+              jsonBody.oldStats = {};
               console.log('didnt have oldstats');
             }
 

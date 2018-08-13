@@ -13,10 +13,10 @@ class Players extends Component {
     getPlayers: [
       'lash24',
       'daemon chaos',
+      'xvhand of godvx'
+      'captainobvs13',
+      'chapper15',
       // 'gronky12',
-      // 'captainobvs13',
-      // 'chapper15',
-      // 'xvhand of godvx'
     ],
     // This will be the renderable players array.
     players: [],
