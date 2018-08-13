@@ -103,6 +103,7 @@ class Players extends Component {
     // const reqPath = '/api/getPlayer?player=';
     return Axios.get(reqPath + handle).then((response) => {
       const playerData = response.data;
+      console.log(playerData);
       let playerObj = {};
       if (playerData.error) {
         playerObj = {
@@ -114,51 +115,60 @@ class Players extends Component {
         playerObj = {
           handle: handle,
           name: name,
-          currentSeason : {
-            updated: playerData.created,
-            solo: {
-              games: playerData.stats.curr_p2.matches.value,
-              kills: playerData.stats.curr_p2.kills.value,
-              kd: playerData.stats.curr_p2.kd.value,
-              kpg: playerData.stats.curr_p2.kpg.value,
-              wins: playerData.stats.curr_p2.top1.value,
-            },
-            duo: {
-              games: playerData.stats.curr_p10.matches.value,
-              kills: playerData.stats.curr_p10.kills.value,
-              kd: playerData.stats.curr_p10.kd.value,
-              kpg: playerData.stats.curr_p10.kpg.value,
-              wins: playerData.stats.curr_p10.top1.value,
-            },
-            squad: {
-              games: playerData.stats.curr_p9.matches.value,
-              kills: playerData.stats.curr_p9.kills.value,
-              kd: playerData.stats.curr_p9.kd.value,
-              kpg: playerData.stats.curr_p9.kpg.value,
-              wins: playerData.stats.curr_p9.top1.value,
-            }
+          currentSeason: {
+            updated: playerData.created
           },
-          lastNight: {
-            updated: playerData.oldStats.created,
-            solo: {
-              games: playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value,
-              kills: playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p2.kills.value - playerData.oldStats.curr_p2.kills.value) / (playerData.stats.curr_p2.matches.value - playerData.oldStats.curr_p2.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p2.top1.value - playerData.oldStats.curr_p2.top1.value,
-            },
-            duo: {
-              games: playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value,
-              kills: playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p10.kills.value - playerData.oldStats.curr_p10.kills.value) / (playerData.stats.curr_p10.matches.value - playerData.oldStats.curr_p10.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p10.top1.value - playerData.oldStats.curr_p10.top1.value,
-            },
-            squad: {
-              games: playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value,
-              kills: playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value,
-              kpg: Math.round(((playerData.stats.curr_p9.kills.value - playerData.oldStats.curr_p9.kills.value) / (playerData.stats.curr_p9.matches.value - playerData.oldStats.curr_p9.matches.value)) * 100) / 100,
-              wins: playerData.stats.curr_p9.top1.value - playerData.oldStats.curr_p9.top1.value,
-            }
+          lastNight: {}
+        }
+
+        // Set current season.
+        Object.keys(playerData.stats).forEach(function(key,index) {
+          let label = '';
+          switch (key) {
+            case 'curr_p2':
+              label = 'solo';
+              break;
+            case 'curr_p9':
+              label = 'squad';
+              break;
+            case 'curr_p10':
+              label = 'duo';
+              break;
+            default:
+              return;
           }
+          playerObj.currentSeason[label] = {
+            games: playerData.stats[key].matches.value,
+            kills: playerData.stats[key].kills.value,
+            kd: playerData.stats[key].kd.value,
+            kpg: playerData.stats[key].kpg.value,
+            wins: playerData.stats[key].top1.value,
+          }
+        });
+        if (playerData.oldStats) {
+          playerObj.lastNight.updated = playerData.oldStats.created;
+          Object.keys(playerData.stats).forEach(function(key,index) {
+            let label = null;
+            switch (key) {
+              case 'curr_p2':
+                label = 'solo';
+                break;
+              case 'curr_p9':
+                label = 'squad';
+                break;
+              case 'curr_p10':
+                label = 'duo';
+                break;
+              default:
+                return;
+            }
+            playerObj.lastNight[label] = {
+              games: playerData.stats[key].matches.value - playerData.oldStats[key].matches.value,
+              kills: playerData.stats[key].kills.value - playerData.oldStats[key].kills.value,
+              kpg: Math.round(((playerData.stats[key].kills.value - playerData.oldStats[key].kills.value) / (playerData.stats[key].matches.value - playerData.oldStats[key].matches.value)) * 100) / 100,
+              wins: playerData.stats[key].top1.value - playerData.oldStats[key].top1.value,
+            }
+          });
         }
       }
       return playerObj;
