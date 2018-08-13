@@ -7,6 +7,7 @@ import Axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 class Players extends Component {
   state = {
@@ -46,6 +47,10 @@ class Players extends Component {
       items.splice(exists, 1);
     }
     this.setState({comparePlayers: items});
+  }
+
+  clearCompareHandler = () => {
+    this.setState({comparePlayers: []});
   }
 
   playlistFilterHandler = (event) => {
@@ -204,7 +209,11 @@ class Players extends Component {
         statsType={this.state.statsType}
         playlistFilter={this.state.playlistFilter}
         changed={this.playlistFilterHandler}
+        cleared={this.clearCompareHandler}
         gutterBottom />;
+    }
+    else if (this.state.comparePlayers.length === 0){
+      comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>click a player to start comparing</Typography>
     }
 
     return (

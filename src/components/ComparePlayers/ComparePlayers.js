@@ -4,6 +4,8 @@ import Player from '../Player/Player';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const comparePlayers = (props) => {
   const player1 = props.players[0];
@@ -18,6 +20,9 @@ const comparePlayers = (props) => {
           <MenuItem value="duo">DUO</MenuItem>
           <MenuItem value="squad">SQUAD</MenuItem>
         </Select>
+        <Button variant="fab" size="small" onClick={props.cleared} aria-label="Delete" className={classes.DeleteButton}>
+          <DeleteIcon />
+        </Button>
       </div>
 
       <Grid container spacing={8} justify="center">

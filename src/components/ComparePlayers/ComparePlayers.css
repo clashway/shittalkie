@@ -5,10 +5,16 @@
   margin-bottom: 20px
 }
 .CompareTitle {
-  display: block;
+  display: inline-block;
+  padding: 10px;
 }
 .PlaylistFilter {
-
+  display: inline-block;
+  padding: 10px;
+}
+.DeleteButton {
+  display: inline-block;
+  padding-left: 15px;
 }
 
 @media screen and (max-width: 600px) {

@@ -16,3 +16,7 @@
 .SearchField {
   padding-right: 5px;
 }
+.CompareHelper {
+  padding: 10px;
+  /* float: right; */
+}
