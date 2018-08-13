@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 const playlist = (props) => {
   return (
     <div className={classes.Playlist}>
-      <h3 className={classes.PlaylistTitle}>{props.name}</h3>
+      <h3 className={classes.PlaylistTitle}>{props.name.toUpperCase()}</h3>
       <Table>
         <TableBody>
           <TableRow key="games">

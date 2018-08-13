@@ -200,7 +200,7 @@ class Players extends Component {
       <Aux>
         <h2 className={classes.MainTitle}>Fortnite Stats</h2>
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary">
-          {this.state.statsType === 'total' ? 'S5 Totals' : 'Last Night'}
+          {this.state.statsType === 'total' ? 'S5 Totals' : 'Last 24 Hours'}
         </Button>
         <form className={classes.SearchArea} noValidate autoComplete="off">
           <TextField
