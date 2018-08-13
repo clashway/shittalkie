@@ -13,8 +13,8 @@ class Players extends Component {
     getPlayers: [
       'lash24',
       'daemon chaos',
-      'xvhand of godvx'
-      'captainobvs13',
+      'xvhand of godvx',
+      // 'captainobvs13',
       // 'chapper15',
       // 'gronky12',
     ],
