@@ -7,8 +7,6 @@ import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 
 class Players extends Component {
   state = {
@@ -26,7 +24,7 @@ class Players extends Component {
     statsType: 'total',
     search: '',
     comparePlayers: [],
-    playlistFilter: "",
+    playlistFilter: '',
   }
 
   statsToggleHandler = () => {
@@ -190,7 +188,11 @@ class Players extends Component {
           activeCompare.push(player);
         }
       });
-      comparePlayersRender = <ComparePlayers players={activeCompare} statsType={this.state.statsType} playlistFilter={this.state.playlistFilter} />;
+      comparePlayersRender = <ComparePlayers
+        players={activeCompare}
+        statsType={this.state.statsType}
+        playlistFilter={this.state.playlistFilter}
+        changed={this.playlistFilterHandler} />;
     }
 
     return (
@@ -206,12 +208,6 @@ class Players extends Component {
             margin="normal"
             />
           <Button variant="contained" color="primary" onClick={this.addPlayerHandler}>Search</Button>
-            <Select value={this.state.playlistFilter} displayEmpty autoWidth onChange={this.playlistFilterHandler}>
-              <MenuItem value="">Choose Playlist</MenuItem>
-              <MenuItem value="solo">solo</MenuItem>
-              <MenuItem value="duo">duo</MenuItem>
-              <MenuItem value="squad">squad</MenuItem>
-            </Select>
         </div>
 
         { comparePlayersRender }
