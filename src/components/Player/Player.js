@@ -36,6 +36,7 @@ const player = (props) => {
     else {
       playlists = [];
       const numPlaylists = Object.keys(props.player[displayKey]).length;
+      const playlistArray = ['solo', 'duo', 'squad'];
       let itemSize = 4;
       if (numPlaylists === 2) {
         itemSize = 6;
@@ -43,8 +44,8 @@ const player = (props) => {
       if (numPlaylists === 1) {
         itemSize = 12;
       }
-      Object.keys(props.player[displayKey]).forEach(function(playlistKey) {
-        if (playlistKey === 'updated') {
+      playlistArray.forEach(function(playlistKey) {
+        if (!props.player[displayKey][playlistKey]) {
           return;
         }
         playlists.push(<Grid item md={itemSize} key={playlistKey}>
