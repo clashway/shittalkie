@@ -240,7 +240,7 @@ class Players extends Component {
         </form> : null}
 
         { comparePlayersRender }
-        <div className={classes.Players}>
+        {!isComparing ? <div className={classes.Players}>
           <Grid container
             justify="center"
             direction="column"
@@ -257,8 +257,7 @@ class Players extends Component {
                     </Grid>
             })}
           </Grid>
-
-        </div>
+        </div> : null}
       </Aux>
     );
   }
