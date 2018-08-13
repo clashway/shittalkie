@@ -20,39 +20,54 @@ const player = (props) => {
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
 
     let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
-    playlists = (
-      <Aux>
-        <Grid item md={4}>
-          <Card>
-            <CardContent>
-              <Playlist name="solo" playlist={props.player[displayKey].solo} />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item md={4}>
-          <Card>
-            <CardContent>
-              <Playlist name="duo" playlist={props.player[displayKey].duo} />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item md={4}>
-          <Card>
-            <CardContent>
-              <Playlist name="squad" playlist={props.player[displayKey].squad} />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Aux>
-    );
+    if (props.playlistFilter) {
+      playlists = (
+        <Aux>
+          <Grid item xs={6}>
+            <Card>
+              <CardContent>
+                <Playlist name={props.playlistFilter} playlist={props.player[displayKey][props.playlistFilter]} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Aux>
+      );
+    }
+    else {
+      playlists = (
+        <Aux>
+          <Grid item md={4}>
+            <Card>
+              <CardContent>
+                <Playlist name="solo" playlist={props.player[displayKey].solo} />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={4}>
+            <Card>
+              <CardContent>
+                <Playlist name="duo" playlist={props.player[displayKey].duo} />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={4}>
+            <Card>
+              <CardContent>
+                <Playlist name="squad" playlist={props.player[displayKey].squad} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Aux>
+      );
+    }
   }
   let playerClasses = [classes.Player];
   if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
     playerClasses.push(classes.Compared);
   }
   return (
-    <div className={playerClasses.join(' ')} onClick={() => props.clicked(props.player.handle)}>
-      <Grid container spacing={16} justify="center">
+    <div className={playerClasses.join(' ')} onClick={props.clicked ? () => props.clicked(props.player.handle) : null}>
+      <Grid container spacing={8} justify="center">
         <Grid item xs={12}>
           <Typography align="center" variant="title" gutterBottom>
             {props.player.name}

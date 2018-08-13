@@ -7,6 +7,8 @@ import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class Players extends Component {
   state = {
@@ -24,6 +26,7 @@ class Players extends Component {
     statsType: 'total',
     search: '',
     comparePlayers: [],
+    playlistFilter: "",
   }
 
   statsToggleHandler = () => {
@@ -45,15 +48,10 @@ class Players extends Component {
       items.splice(exists, 1);
     }
     this.setState({comparePlayers: items});
-
-    if (items.length === 2) {
-
-    }
   }
 
-  comparePlaylistsHandler = (handle, playlist) => {
-    console.log(handle, playlist);
-    return false;
+  playlistFilterHandler = (event) => {
+    this.setState({playlistFilter: event.target.value});
   }
 
   addPlayerHandler = () => {
@@ -192,7 +190,7 @@ class Players extends Component {
           activeCompare.push(player);
         }
       });
-      comparePlayersRender = <ComparePlayers players={activeCompare} statsType={this.state.statsType} />;
+      comparePlayersRender = <ComparePlayers players={activeCompare} statsType={this.state.statsType} playlistFilter={this.state.playlistFilter} />;
     }
 
     return (
@@ -208,7 +206,14 @@ class Players extends Component {
             margin="normal"
             />
           <Button variant="contained" color="primary" onClick={this.addPlayerHandler}>Search</Button>
+            <Select value={this.state.playlistFilter} displayEmpty autoWidth onChange={this.playlistFilterHandler}>
+              <MenuItem value="">Choose Playlist</MenuItem>
+              <MenuItem value="solo">solo</MenuItem>
+              <MenuItem value="duo">duo</MenuItem>
+              <MenuItem value="squad">squad</MenuItem>
+            </Select>
         </div>
+
         { comparePlayersRender }
         <div className={classes.Players}>
           <Grid container
@@ -218,11 +223,13 @@ class Players extends Component {
             spacing={24}
             >
             {this.state.players.map((p, index) => {
-              return <Grid item key={p.name + index}><Player player={p}
-                displayType={this.state.statsType}
-                clicked={this.comparePlayersHandler}
-                comparePlayers={this.state.comparePlayers}
-                /></Grid>
+              return <Grid item key={p.name + index}>
+                      <Player player={p}
+                        displayType={this.state.statsType}
+                        clicked={this.comparePlayersHandler}
+                        comparePlayers={this.state.comparePlayers}
+                        />
+                    </Grid>
             })}
           </Grid>
 
