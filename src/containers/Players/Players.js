@@ -189,7 +189,8 @@ class Players extends Component {
 
   render() {
     let comparePlayersRender = '';
-    if (this.state.comparePlayers.length === 2) {
+    let isComparing = this.state.comparePlayers.length === 2;
+    if (isComparing) {
       const comparePlayers = this.state.comparePlayers;
       const currentPlayers = this.state.players;
       let activeCompare = [];
@@ -212,7 +213,7 @@ class Players extends Component {
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary">
           {this.state.statsType === 'total' ? 'S5 Totals' : 'Last 24 Hours'}
         </Button>
-        <form className={classes.SearchArea} noValidate autoComplete="off">
+        { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off">
           <TextField
             className={classes.SearchField}
             label="Search Player:"
@@ -227,7 +228,7 @@ class Players extends Component {
             color="primary"
             onClick={this.addPlayerHandler}>Search
           </Button>
-        </form>
+        </form> : null}
 
         { comparePlayersRender }
         <div className={classes.Players}>

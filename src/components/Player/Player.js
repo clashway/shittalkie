@@ -35,11 +35,19 @@ const player = (props) => {
     }
     else {
       playlists = [];
+      const numPlaylists = Object.keys(props.player[displayKey]).length;
+      let itemSize = 4;
+      if (numPlaylists === 2) {
+        itemSize = 6;
+      }
+      if (numPlaylists === 1) {
+        itemSize = 12;
+      }
       Object.keys(props.player[displayKey]).forEach(function(playlistKey) {
         if (playlistKey === 'updated') {
           return;
         }
-        playlists.push(<Grid item md={4} key={playlistKey}>
+        playlists.push(<Grid item md={itemSize} key={playlistKey}>
             <Card>
               <CardContent>
                 <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
