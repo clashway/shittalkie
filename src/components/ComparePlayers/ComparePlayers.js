@@ -10,6 +10,19 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const comparePlayers = (props) => {
   const player1 = props.players[0];
   const player2 = props.players[1];
+
+  // Create comparer object.
+  let comparer = JSON.parse(JSON.stringify(player1))
+  Object.keys(player1[props.statsType]).forEach(function (playlist) {
+    if (playlist === 'updated') {
+      return;
+    }
+    Object.keys(player1[props.statsType][playlist]).forEach(function (stat) {
+      comparer[props.statsType][playlist][stat] =
+        player1[props.statsType][playlist][stat] > player2[props.statsType][playlist][stat] ? player1.name : player2.name;
+    });
+  });
+
   return (
     <div className={classes.ComparePlayers}>
       <div className={classes.CompareNav}>
@@ -30,6 +43,7 @@ const comparePlayers = (props) => {
           return <Grid item sm={6} md={props.playlistFilter ? 6 : 12} lg={6} key={p.name + index}>
             <ComparePlayer
               player={p}
+              comparer={comparer}
               displayType={props.statsType}
               playlistFilter={props.playlistFilter}
               />

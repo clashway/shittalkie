@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './ComparePlayer.css';
-import Playlist from '../../Playlist/Playlist'
+import Playlist from '../../Playlist/PlaylistCompared'
 import Aux from '../../../hoc/Aux'
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
@@ -26,7 +26,12 @@ const comparePlayer = (props) => {
           <Grid item xs={12}>
             <Card>
               <CardContent>
-                <Playlist name={props.playlistFilter} playlist={props.player[displayKey][props.playlistFilter]} />
+                <Playlist
+                  name={props.playlistFilter}
+                  playlist={props.player[displayKey][props.playlistFilter]}
+                  player={props.player.name}
+                  comparer={props.comparer[displayKey][props.playlistFilter]}
+                  />
               </CardContent>
             </Card>
           </Grid>
@@ -51,7 +56,11 @@ const comparePlayer = (props) => {
         playlists.push(<Grid item xs={12} md={itemSize} key={playlistKey}>
             <Card classes={{root: classes.Card}} raised={false}>
               <CardContent>
-                <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
+                <Playlist
+                  name={playlistKey}
+                  playlist={props.player[displayKey][playlistKey]}
+                  player={props.player.name}
+                  comparer={props.comparer[displayKey][playlistKey]} />
               </CardContent>
             </Card>
           </Grid>

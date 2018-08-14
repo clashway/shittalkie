@@ -2,3 +2,9 @@
   padding: 0;
   margin: 0;
 }
+.Green {
+  color: green !important;
+}
+.Red {
+  color: red !important;
+}
