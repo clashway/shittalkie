@@ -1,16 +1,20 @@
 .MainTitle {
   display: inline-block;
   margin-right: 10px;
+  font-size: 32px;
 }
 .SearchArea {
   margin-bottom: 20px;
   display: block;
 }
 .SearchButton {
-  padding-left: 5px;
+  padding-left: 5px !important;
+}
+.StatsToggle {
+  margin-bottom: 9px !important;
 }
 .SearchField {
-  padding-right: 5px;
+  padding-right: 5px !important;
 }
 .CompareHelper {
   padding: 10px;

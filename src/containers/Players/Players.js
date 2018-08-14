@@ -258,7 +258,7 @@ class Players extends Component {
     return (
       <Aux>
         <h2 className={classes.MainTitle}>Fortnite Stats</h2>
-        <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary">
+        <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
           {this.state.statsType === 'total' ? 'S5 Totals' : 'Last 24 Hours'}
         </Button>
         { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
@@ -275,7 +275,7 @@ class Players extends Component {
 
           {this.state.submitLoading ? <CircularProgress /> :
           <Button
-            className={buttonClasses.join(' ')}
+            classes={{root: buttonClasses.join(' ')}}
             variant="contained"
             color="primary"
             onClick={this.addPlayerHandler}>Search
