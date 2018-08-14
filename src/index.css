@@ -1,5 +1,11 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', serif;
+  font-family: 'Burbank', serif;
+}
+
+@font-face {
+  font-family: 'Burbank';
+  src:
+    url(./assets/BurbankBigCondensed-Black.otf) format('opentype');
 }

@@ -67,7 +67,7 @@ class Players extends Component {
     this.timer = setTimeout(() => {
       let self = this;
       const search = this.state.search.toLowerCase();
-      const newPlayerPromise = this.lookupPlayer(search);
+      const newPlayerPromise = this.lookupFortnitePlayer(search);
       newPlayerPromise.then(function(newPlayer) {
         self.setState(prevState => {
           let newState = {
@@ -101,7 +101,7 @@ class Players extends Component {
     }
   }
 
-  lookupPlayer = (handle) => {
+  lookupFortnitePlayer = (handle) => {
     let name = '';
     switch (handle) {
       case 'captainobvs13':
@@ -205,7 +205,7 @@ class Players extends Component {
 
   componentDidMount() {
     this.state.getPlayers.map((handle, index) => {
-      const newPlayerPromise = this.lookupPlayer(handle);
+      const newPlayerPromise = this.lookupFortnitePlayer(handle);
       let self = this;
       return newPlayerPromise.then(function(newPlayer) {
         self.setState(prevState => {
