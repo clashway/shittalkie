@@ -5,12 +5,18 @@
 .Card {
   background-color: #f1f2f6 !important;
 }
-
+.NextUpdate {
+  display:block;
+}
 .Player {
-  
+
 }
 @media screen and (min-width: 768px) {
   .Player:hover {
     background-color: #c1d5e8;
+    cursor: pointer;
+  }
+  .NextUpdate {
+    display: inline-block;
   }
 }

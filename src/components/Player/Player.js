@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 const player = (props) => {
   let playlists = null;
   let rangeString = '';
+  let nextUpdate = '';
   if (props.player.error) {
     playlists = props.player.error;
   }
@@ -18,6 +19,8 @@ const player = (props) => {
     let startDate = new Date(props.player.lastNight.updated);
     let endDate = new Date(props.player.currentSeason.updated);
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
+    nextUpdate = moment(new Date(endDate)).add(15, 'm');
+    nextUpdate = moment(nextUpdate).format('hh:mma');
 
     let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
     if (props.playlistFilter) {
@@ -70,7 +73,7 @@ const player = (props) => {
           <Typography align="center" variant="title" gutterBottom>
             {props.player.name}
           </Typography>
-          {rangeString !== '' ? <Typography variant="caption" gutterBottom>({rangeString})</Typography> : null }
+          {rangeString !== '' ? <Typography variant="caption" gutterBottom>{rangeString} <span className={classes.NextUpdate}>(next update at {nextUpdate})</span></Typography> : null }
         </Grid>
         {playlists}
       </Grid>
