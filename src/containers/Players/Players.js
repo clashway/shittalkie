@@ -72,7 +72,8 @@ class Players extends Component {
         self.setState(prevState => {
           let newState = {
             submitLoading: false,
-            submitSuccess: true
+            submitSuccess: true,
+            submitError: ''
           }
           if (newPlayer.error) {
             newState.submitSuccess = false;
@@ -235,6 +236,22 @@ class Players extends Component {
       comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>click a player to start comparing</Typography>
     }
 
+    let buttonClasses = [classes.SearchButton];
+    if (this.state.submitLoading) {
+      buttonClasses.push(classes.Loading);
+    }
+
+    let players = (
+      this.state.players.map((p, index) => {
+        return <Grid item xs={12} key={p.name + index} zeroMinWidth>
+                  <Player player={p}
+                    displayType={this.state.statsType}
+                    clicked={this.comparePlayersHandler}
+                    comparePlayers={this.state.comparePlayers}
+                    />
+              </Grid>
+      })
+    );
     return (
       <Aux>
         <h2 className={classes.MainTitle}>Fortnite Stats</h2>
@@ -252,33 +269,32 @@ class Players extends Component {
             onChange={this.searchFieldHandler}
             onKeyPress={this.searchKeyPressHandler}
             />
+
+          {this.state.submitLoading ? <CircularProgress /> :
           <Button
-            className={classes.SearchButton}
+            className={buttonClasses.join(' ')}
             variant="contained"
             color="primary"
             onClick={this.addPlayerHandler}>Search
           </Button>
+          }
+          {this.state.submitSuccess ? <CheckCircle color="action" /> : null }
         </form> : null}
 
         { comparePlayersRender }
-        {!isComparing ? <div className={classes.Players}>
+        {!isComparing ?
+
+          <div className={classes.Players}>
           <Grid container
             justify="center"
             direction="column"
             alignItems="center"
             spacing={24}
             >
-            {this.state.players.map((p, index) => {
-              return <Grid item xs={12} key={p.name + index} zeroMinWidth>
-                        <Player player={p}
-                          displayType={this.state.statsType}
-                          clicked={this.comparePlayersHandler}
-                          comparePlayers={this.state.comparePlayers}
-                          />
-                    </Grid>
-            })}
+            {players}
           </Grid>
-        </div> : null}
+
+        </div>  : null}
       </Aux>
     );
   }
