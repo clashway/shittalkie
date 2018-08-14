@@ -8,50 +8,31 @@ import TableRow from '@material-ui/core/TableRow';
 const playlistCompared = (props) => {
   const winner = {root: classes.Green};
   const loser = {root: classes.Red};
+  let tableRows = Object.keys(props.playlist).map(function(stat, key) {
+    return (
+      <TableRow key={stat}>
+        <TableCell component="th" scope="row">
+          {stat}
+        </TableCell>
+        <TableCell classes={props.comparer[stat] === props.player ? winner : props.comparer[stat] !== 'tie' ? loser : null} numeric>
+          {props.playlist[stat]}
+        </TableCell>
+      </TableRow>
+    );
+  });
   return (
     <div className={classes.Playlist}>
       <h3 className={classes.PlaylistTitle}>{props.name.toUpperCase()}</h3>
       <Table>
         <TableBody>
-          <TableRow key="games">
-            <TableCell component="th" scope="row">
-              games
-            </TableCell>
-            <TableCell classes={props.comparer.games === props.player ? winner : loser} numeric>
-              {props.playlist.games}
-            </TableCell>
-          </TableRow>
-          <TableRow key="kills">
-            <TableCell component="th" scope="row">
-              kills
-            </TableCell>
-            <TableCell classes={props.comparer.kills === props.player ? winner : loser} numeric>
-              {props.playlist.kills}
-            </TableCell>
-          </TableRow>
-          <TableRow key="kpg">
-            <TableCell component="th" scope="row">
-              kills/game
-            </TableCell>
-            <TableCell classes={props.comparer.kpg === props.player ? winner : loser} numeric>
-              {isNaN(props.playlist.kpg) ? 0 : props.playlist.kpg}
-            </TableCell>
-          </TableRow>
-          <TableRow key="wins">
-            <TableCell component="th" scope="row">
-              wins
-            </TableCell>
-            <TableCell classes={props.comparer.wins === props.player ? winner : loser} numeric>
-              {props.playlist.wins}
-            </TableCell>
-          </TableRow>
+          {tableRows}
           {
             props.playlist.kd ?
               <TableRow key="kd">
                 <TableCell component="th" scope="row">
                   kills/deaths
                 </TableCell>
-                <TableCell classes={props.comparer.kd === props.player ? winner : loser} numeric>
+                <TableCell classes={props.comparer.kd === props.player ? winner : props.comparer.kd !== 'tie' ? loser : null} numeric>
                   {props.playlist.kd}
                 </TableCell>
               </TableRow> : null

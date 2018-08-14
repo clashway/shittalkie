@@ -19,7 +19,10 @@ const comparePlayers = (props) => {
     }
     Object.keys(player1[props.statsType][playlist]).forEach(function (stat) {
       comparer[props.statsType][playlist][stat] =
-        player1[props.statsType][playlist][stat] > player2[props.statsType][playlist][stat] ? player1.name : player2.name;
+        player1[props.statsType][playlist][stat] > player2[props.statsType][playlist][stat]
+        ? player1.name
+        : player1[props.statsType][playlist][stat] === player2[props.statsType][playlist][stat]
+          ? 'tie': player2.name;
     });
   });
 

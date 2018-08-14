@@ -193,6 +193,9 @@ class Players extends Component {
               kpg: Math.round(((playerData.stats[key].kills.value - playerData.oldStats[key].kills.value) / (playerData.stats[key].matches.value - playerData.oldStats[key].matches.value)) * 100) / 100,
               wins: playerData.stats[key].top1.value - playerData.oldStats[key].top1.value,
             }
+            if (isNaN(playerObj.lastNight[label].kpg)) {
+              playerObj.lastNight[label].kpg = 0;
+            }
           });
         }
       }

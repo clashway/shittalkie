@@ -32,7 +32,7 @@ const playlist = (props) => {
               kills/game
             </TableCell>
             <TableCell numeric>
-              {isNaN(props.playlist.kpg) ? 0 : props.playlist.kpg}
+              {props.playlist.kpg}
             </TableCell>
           </TableRow>
           <TableRow key="wins">
