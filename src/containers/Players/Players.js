@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckCircle from '@material-ui/icons/CheckCircle';
 
 class Players extends Component {
   state = {
@@ -26,6 +28,9 @@ class Players extends Component {
     search: '',
     comparePlayers: [],
     playlistFilter: '',
+    submitLoading: false,
+    submitSuccess: false,
+    submitError: '',
   }
 
   statsToggleHandler = () => {
@@ -58,14 +63,29 @@ class Players extends Component {
   }
 
   addPlayerHandler = () => {
-    let self = this;
-    const search = this.state.search.toLowerCase();
-    const newPlayerPromise = this.lookupPlayer(search);
-    newPlayerPromise.then(function(newPlayer) {
-      self.setState(prevState => {
-        return {players: [newPlayer, ...prevState.players]}
+    this.setState({submitLoading: true});
+    this.timer = setTimeout(() => {
+      let self = this;
+      const search = this.state.search.toLowerCase();
+      const newPlayerPromise = this.lookupPlayer(search);
+      newPlayerPromise.then(function(newPlayer) {
+        self.setState(prevState => {
+          let newState = {
+            submitLoading: false,
+            submitSuccess: true
+          }
+          if (newPlayer.error) {
+            newState.submitSuccess = false;
+            newState.submitError = newPlayer.error;
+          } else {
+            newState.players = [newPlayer, ...prevState.players];
+            newState.search = '';
+          }
+          return newState;
+        });
       });
-    });
+    }, 2000)
+
   }
 
   searchFieldHandler = (event) => {
@@ -108,7 +128,6 @@ class Players extends Component {
     // const reqPath = '/api/getPlayer?player=';
     return Axios.get(reqPath + handle).then((response) => {
       const playerData = response.data;
-      console.log(playerData);
       let playerObj = {};
       if (playerData.error) {
         playerObj = {
@@ -224,6 +243,8 @@ class Players extends Component {
         </Button>
         { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField
+            error={this.state.submitError ? true : false}
+            helperText={this.state.submitError}
             className={classes.SearchField}
             label="Search Player:"
             placeholder="xbox handle"
