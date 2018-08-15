@@ -23,6 +23,8 @@ class Players extends Component {
     ],
     // This will be the renderable players array.
     players: [],
+    fortnitePlayers: [],
+    rocketLeaguePlayers: [],
     statsType: 'lastNight',
     search: '',
     comparePlayers: [],
@@ -30,12 +32,63 @@ class Players extends Component {
     submitLoading: false,
     submitSuccess: false,
     submitError: '',
+    game: 'fortnite',
   }
 
   statsToggleHandler = () => {
     this.setState((prevState) => {
       return {
         statsType: prevState.statsType === 'currentSeason' ? 'lastNight' : 'currentSeason'
+      };
+    });
+  }
+  gameToggleHandler = () => {
+    const newGame = this.state.game === 'fortnite' ? 'rocketLeague' : 'fortnite';
+    this.setState({game: newGame, players: []});
+
+    let newPlayers = [];
+    switch (newGame) {
+      case 'fortnite':
+        if (this.state.fortNitePlayers.length === 0) {
+          let self = this;
+          return this.state.getPlayers.map((handle, index) => {
+            const newPlayerPromise = self.lookupPlayer(handle, newGame);
+            return newPlayerPromise.then(function(newPlayer) {
+              self.setState(prevState => {
+                return {
+                  players: [...prevState.players, newPlayer],
+                  fortNitePlayers: [...prevState.players, newPlayer]
+                }
+              });
+            });
+          });
+        }
+        else {
+          newPlayers = [...this.state.fortNitePlayers];
+        }
+        break;
+      case 'rocketLeague':
+        if (this.state.rocketLeaguePlayers.length === 0) {
+          let self = this;
+          return this.state.getPlayers.map((handle, index) => {
+            const newPlayer = self.lookupPlayer(handle, newGame);
+            return self.setState(prevState => {
+              return {
+                players: [...prevState.players, newPlayer],
+                rocketLeaguePlayers: [...prevState.players, newPlayer]
+              }
+            });
+          });
+        }
+        else {
+          newPlayers = [...this.state.rocketLeaguePlayers];
+        }
+        break;
+      default:
+    }
+    this.setState((prevState) => {
+      return {
+        players: newPlayers
       };
     });
   }
@@ -66,7 +119,7 @@ class Players extends Component {
     this.timer = setTimeout(() => {
       let self = this;
       const search = this.state.search.toLowerCase();
-      const newPlayerPromise = this.lookupFortnitePlayer(search);
+      const newPlayerPromise = this.lookupPlayer(search, this.state.game);
       newPlayerPromise.then(function(newPlayer) {
         self.setState(prevState => {
           let newState = {
@@ -99,6 +152,129 @@ class Players extends Component {
   searchKeyPressHandler = (event) => {
     if (event.key === 'Enter') {
       this.addPlayerHandler();
+    }
+  }
+
+  lookupPlayer = (handle, game) => {
+    let name = '';
+    switch (handle) {
+      case 'captainobvs13':
+        name = 'Cappy';
+        break;
+      case 'daemon chaos':
+        name = 'Wes';
+        break;
+      case 'lash24':
+        name = 'Lash';
+        break;
+      case 'xvhand of godvx':
+        name = 'Plage';
+        break;
+      case 'chapper_15':
+        name = 'Chap';
+        break;
+      case 'gronky12':
+        name = 'GronkyHD';
+        break;
+      default:
+        name = handle;
+    }
+    const playerObj = {
+      name: name,
+      handle: handle
+    };
+    let playerReturn = {};
+    switch (game) {
+      case 'fortnite':
+        const newPlayerPromise = this.lookupFortnitePlayer(handle);
+        playerReturn = newPlayerPromise.then(function(newPlayer) {
+          return {...newPlayer, ...playerObj};
+        });
+        break;
+      case 'rocketLeague':
+        playerReturn = {...this.lookupRocketLeaguePlayer(handle), ...playerObj};
+        break;
+      default:
+    }
+    return playerReturn;
+  }
+
+  lookupRocketLeaguePlayer = (playerObj) => {
+    const playerData = {
+      created: 1534342692889,
+      stats: {
+        wins: 555,
+        goals: 666,
+        mvps: 777,
+        saves: 888,
+        shots: 123,
+        assists: 444
+      },
+      oldStats: {
+        updated: 1534269698721,
+        wins: 553,
+        goals: 662,
+        mvps: 774,
+        saves: 881,
+        shots: 121,
+        assists: 441
+      },
+      ranks: {
+        solo: {
+          tier: 8,
+          division: 2
+        },
+        duo: {
+          tier: 10,
+          division: 0
+        },
+        threes: {
+          tier: 4,
+          division: 3
+        },
+        solo3s: {
+          tier: 9,
+          division: 4
+        }
+      }
+    }
+    return {
+      currentSeason: {
+        updated: playerData.created,
+        wins: playerData.stats.wins,
+        goals: playerData.stats.goals,
+        mvps: playerData.stats.mvps,
+        saves: playerData.stats.saves,
+        shots: playerData.stats.shots,
+        assists: playerData.stats.assists
+      },
+      lastNight: {
+        updated: playerData.oldStats.updated,
+        wins: playerData.stats.wins - playerData.oldStats.wins,
+        goals: playerData.stats.goals - playerData.oldStats.goals,
+        mvps: playerData.stats.mvps - playerData.oldStats.mvps,
+        saves: playerData.stats.saves - playerData.oldStats.saves,
+        shots: playerData.stats.shots - playerData.oldStats.shots,
+        assists: playerData.stats.assists - playerData.oldStats.assists
+      },
+      ranks: {
+        solo: {
+          tier: 8,
+          division: 2
+        },
+        duo: {
+          tier: 10,
+          division: 0
+        },
+        threes: {
+          tier: 4,
+          division: 3
+        },
+        solo3s: {
+          tier: 9,
+          division: 4
+        }
+      }
     }
   }
 
@@ -205,15 +381,32 @@ class Players extends Component {
   }
 
   componentDidMount() {
-    this.state.getPlayers.map((handle, index) => {
-      const newPlayerPromise = this.lookupFortnitePlayer(handle);
-      let self = this;
-      return newPlayerPromise.then(function(newPlayer) {
-        self.setState(prevState => {
-          return {players: [...prevState.players, newPlayer]}
+    switch (this.state.game) {
+      case 'fortnite':
+        return this.state.getPlayers.map((handle, index) => {
+          const newPlayerPromise = this.lookupPlayer(handle, this.state.game);
+          let self = this;
+          return newPlayerPromise.then(function(newPlayer) {
+            self.setState(prevState => {
+              return {
+                players: [...prevState.players, newPlayer],
+                fortNitePlayers: [...prevState.players, newPlayer]
+              }
+            });
+          });
         });
-      });
-    });
+      case 'rocketLeague':
+        return this.state.getPlayers.map((handle, index) => {
+          const newPlayer = this.lookupPlayer(handle, this.state.game);
+          return this.setState(prevState => {
+            return {
+              players: [...prevState.players, newPlayer],
+              rocketLeaguePlayers: [...prevState.players, newPlayer]
+            }
+          });
+        });
+      default:
+    }
   }
 
   render() {
@@ -248,7 +441,9 @@ class Players extends Component {
     let players = (
       this.state.players.map((p, index) => {
         return <Grid item xs={12} key={p.name + index} zeroMinWidth>
-                  <Player player={p}
+                  <Player
+                    player={p}
+                    game={this.state.game}
                     displayType={this.state.statsType}
                     clicked={this.comparePlayersHandler}
                     comparePlayers={this.state.comparePlayers}
@@ -258,9 +453,9 @@ class Players extends Component {
     );
     return (
       <Aux>
-        <h2 className={classes.MainTitle}>Fortnite Stats</h2>
+        <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{this.state.game === 'rocketLeague' ? 'Rocket League' : this.state.game} Stats</h2>
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
-          {this.state.statsType === 'currentSeason' ? 'S5 Totals' : 'Last 24 Hours'}
+          {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
         </Button>
         { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField

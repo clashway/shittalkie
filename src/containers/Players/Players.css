@@ -1,5 +1,6 @@
 .MainTitle {
   display: inline-block;
+  text-transform: capitalize;
   margin-right: 10px;
   font-size: 32px;
 }
@@ -12,6 +13,10 @@
 }
 .StatsToggle {
   margin-bottom: 9px !important;
+}
+.GameToggle {
+  margin-bottom: 9px !important;
+  margin-left: 10px !important;
 }
 .SearchField {
   padding-right: 5px !important;
@@ -34,4 +39,9 @@
   position: absolute;
   margin-top: 20px;
   margin-left: -47px;
+}
+@media screen and (min-width: 768px) {
+  .MainTitle {
+    cursor: pointer;
+  }
 }
