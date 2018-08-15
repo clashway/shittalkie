@@ -55,17 +55,24 @@ class Player extends Component {
   }
 
   getRocketLeaguePlaylists = () => {
-    let playlists = null;
-    playlists = (
-      <Aux>
-        <Grid item xs={12}>
+    let playlists = [];
+    playlists.push(
+        <Grid item xs={6} key="ranks">
+          <Card>
+            <CardContent>
+              <Playlist name={'Ranks'} playlist={this.props.player[this.props.displayType]} />
+            </CardContent>
+          </Card>
+        </Grid>
+    );
+    playlists.push(
+        <Grid item xs={6} key="summary">
           <Card>
             <CardContent>
               <Playlist name={'Summary'} playlist={this.props.player[this.props.displayType]} />
             </CardContent>
           </Card>
         </Grid>
-      </Aux>
     );
     return playlists;
   }
