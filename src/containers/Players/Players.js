@@ -92,6 +92,7 @@ class Players extends Component {
     this.setState({
       search: event.target.value,
       submitSuccess: false,
+      submitError: ''
     });
   }
 
