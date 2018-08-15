@@ -19,8 +19,7 @@ class Players extends Component {
       'daemon chaos',
       'xvhand of godvx',
       'captainobvs13',
-      'chapper_15',
-      // 'gronky12',
+      'chapper_15'
     ],
     // This will be the renderable players array.
     players: [],
@@ -91,7 +90,8 @@ class Players extends Component {
 
   searchFieldHandler = (event) => {
     this.setState({
-      search: event.target.value
+      search: event.target.value,
+      submitSuccess: false,
     });
   }
 
@@ -273,15 +273,15 @@ class Players extends Component {
             onKeyPress={this.searchKeyPressHandler}
             />
 
-          {this.state.submitLoading ? <CircularProgress /> :
           <Button
             classes={{root: buttonClasses.join(' ')}}
             variant="contained"
             color="primary"
+            disabled={this.state.submitLoading}
             onClick={this.addPlayerHandler}>Search
           </Button>
-          }
-          {this.state.submitSuccess ? <CheckCircle color="action" /> : null }
+          {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null }
+          {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
         </form> : null}
 
         { comparePlayersRender }

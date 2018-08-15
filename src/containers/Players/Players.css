@@ -5,10 +5,10 @@
 }
 .SearchArea {
   margin-bottom: 20px;
-  display: block;
 }
 .SearchButton {
   padding-left: 5px !important;
+  padding-right: 10px !important;
 }
 .StatsToggle {
   margin-bottom: 9px !important;
@@ -19,8 +19,19 @@
 .CompareHelper {
   padding: 10px;
 }
+.CheckCircle {
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 20px;
+  color: #15b952 !important;
+}
 .Players {
   align-items: center;
   justify-content: center;
   width: 100%;
+}
+.CircularProgress {
+  position: absolute;
+  margin-top: 20px;
+  margin-left: -47px;
 }
