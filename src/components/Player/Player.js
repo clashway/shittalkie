@@ -22,7 +22,7 @@ const player = (props) => {
     nextUpdate = moment(new Date(endDate)).add(15, 'm');
     nextUpdate = moment(nextUpdate).format('hh:mma');
 
-    let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
+    let displayKey = props.displayType;
     if (props.playlistFilter) {
       playlists = (
         <Aux>

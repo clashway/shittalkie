@@ -19,7 +19,7 @@ const comparePlayer = (props) => {
     let endDate = new Date(props.player.currentSeason.updated);
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
 
-    let displayKey = props.displayType === 'total' ? 'currentSeason' : 'lastNight';
+    let displayKey = props.displayType;
     if (props.playlistFilter) {
       playlists = (
         <Aux>

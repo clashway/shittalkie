@@ -36,7 +36,7 @@ class Players extends Component {
   statsToggleHandler = () => {
     this.setState((prevState) => {
       return {
-        statsType: prevState.statsType === 'total' ? 'lastNight' : 'total'
+        statsType: prevState.statsType === 'currentSeason' ? 'lastNight' : 'currentSeason'
       };
     });
   }
@@ -259,7 +259,7 @@ class Players extends Component {
       <Aux>
         <h2 className={classes.MainTitle}>Fortnite Stats</h2>
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
-          {this.state.statsType === 'total' ? 'S5 Totals' : 'Last 24 Hours'}
+          {this.state.statsType === 'currentSeason' ? 'S5 Totals' : 'Last 24 Hours'}
         </Button>
         { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField
