@@ -7,6 +7,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 const playlist = (props) => {
   let tableRows = Object.keys(props.playlist).map(function(stat, key) {
+    if (stat === 'updated') {
+      return null;
+    }
     return (
       <TableRow key={stat}>
         <TableCell component="th" scope="row">

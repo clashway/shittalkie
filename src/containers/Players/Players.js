@@ -30,7 +30,7 @@ class Players extends Component {
     submitLoading: false,
     submitSuccess: false,
     submitError: '',
-    game: 'fortnite',
+    game: 'rocketLeague',
   }
 
   statsToggleHandler = () => {
@@ -105,16 +105,6 @@ class Players extends Component {
 
   lookupPlayer = (handle, game) => {
     let name = '';
-    let playerObj = {};
-    switch (game) {
-      case 'fortnite':
-        playerObj = this.lookupFortnitePlayer(handle);
-        break;
-      case 'rocketLeague':
-        playerObj = this.lookupRocketLeaguePlayer(handle);
-        break;
-      default:
-    }
     switch (handle) {
       case 'captainobvs13':
         name = 'Cappy';
@@ -137,14 +127,30 @@ class Players extends Component {
       default:
         name = handle;
     }
-    playerObj.name = name;
-    return playerObj;
+    const playerObj = {
+      name: name,
+      handle: handle
+    };
+    let playerReturn = {};
+    switch (game) {
+      case 'fortnite':
+        const newPlayerPromise = this.lookupFortnitePlayer(handle);
+        playerReturn = newPlayerPromise.then(function(newPlayer) {
+          return {...newPlayer, ...playerObj};
+        });
+        break;
+      case 'rocketLeague':
+        playerReturn = {...this.lookupRocketLeaguePlayer(handle), ...playerObj};
+        break;
+      default:
+    }
+    return playerReturn;
   }
 
   lookupRocketLeaguePlayer = (playerObj) => {
     return {
       currentSeason: {
-        updated: '1534342692889',
+        updated: 1534342692889,
         wins: 555,
         goals: 666,
         mvps: 777,
@@ -153,7 +159,7 @@ class Players extends Component {
         assists: 444
       },
       lastNight: {
-        updated: '1534269698721',
+        updated: 1534269698721,
         wins: 553,
         goals: 661,
         mvps: 775,
@@ -280,7 +286,6 @@ class Players extends Component {
           });
         }
       }
-      console.log(playerObj);
       return playerObj;
     });
   }
@@ -341,7 +346,9 @@ class Players extends Component {
     let players = (
       this.state.players.map((p, index) => {
         return <Grid item xs={12} key={p.name + index} zeroMinWidth>
-                  <Player player={p}
+                  <Player
+                    player={p}
+                    game={this.state.game}
                     displayType={this.state.statsType}
                     clicked={this.comparePlayersHandler}
                     comparePlayers={this.state.comparePlayers}
