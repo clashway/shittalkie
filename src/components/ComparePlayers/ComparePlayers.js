@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const comparePlayers = (props) => {
   const player1 = props.players[0];
   const player2 = props.players[1];
-  console.log(props.statsType);
+
   // Create comparer object.
   let comparer = JSON.parse(JSON.stringify(player1))
   Object.keys(player1[props.statsType]).forEach(function (playlist) {
@@ -19,9 +19,9 @@ const comparePlayers = (props) => {
     }
     Object.keys(player1[props.statsType][playlist]).forEach(function (stat) {
       comparer[props.statsType][playlist][stat] =
-        player1[props.statsType][playlist][stat] > player2[props.statsType][playlist][stat]
+        Number(player1[props.statsType][playlist][stat]) > Number(player2[props.statsType][playlist][stat])
         ? player1.name
-        : player1[props.statsType][playlist][stat] === player2[props.statsType][playlist][stat]
+        : Number(player1[props.statsType][playlist][stat]) === Number(player2[props.statsType][playlist][stat])
           ? 'tie': player2.name;
     });
   });
