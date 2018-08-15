@@ -26,17 +26,6 @@ const playlistCompared = (props) => {
       <Table>
         <TableBody>
           {tableRows}
-          {
-            props.playlist.kd ?
-              <TableRow key="kd">
-                <TableCell component="th" scope="row">
-                  kills/deaths
-                </TableCell>
-                <TableCell classes={props.comparer.kd === props.player ? winner : props.comparer.kd !== 'tie' ? loser : null} numeric>
-                  {props.playlist.kd}
-                </TableCell>
-              </TableRow> : null
-          }
         </TableBody>
       </Table>
     </div>

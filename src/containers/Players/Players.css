@@ -1,5 +1,6 @@
 .MainTitle {
   display: inline-block;
+  text-transform: capitalize;
   margin-right: 10px;
   font-size: 32px;
 }
