@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircle from '@material-ui/icons/CheckCircle';
+import store from '../../store/index'
+import { changeGame } from '../../actions/index'
 
 class Players extends Component {
   state = {
@@ -32,7 +34,6 @@ class Players extends Component {
     submitLoading: false,
     submitSuccess: false,
     submitError: '',
-    game: 'fortnite',
   }
 
   statsToggleHandler = () => {
@@ -43,14 +44,16 @@ class Players extends Component {
     });
   }
   gameToggleHandler = () => {
-    const newGame = this.state.game === 'fortnite' ? 'rocketLeague' : 'fortnite';
-    this.setState({game: newGame, players: []});
+    const currentGame = store.getState().game;
+    const newGame = currentGame === 'fortnite' ? 'rocketLeague' : 'fortnite';
+    store.dispatch( changeGame(newGame) );
+    this.setState({players: []});
 
     let newPlayers = [];
     switch (newGame) {
       case 'fortnite':
-      newPlayers = [...this.state.fortNitePlayers];
-      if (this.state.fortNitePlayers.length === 0) {
+        newPlayers = [...this.state.fortNitePlayers];
+        if (this.state.fortNitePlayers.length === 0) {
           let self = this;
           return this.state.getPlayers.map((handle, index) => {
             const newPlayerPromise = self.lookupPlayer(handle, newGame);
@@ -111,11 +114,12 @@ class Players extends Component {
   }
 
   addPlayerHandler = () => {
+    const currentGame = store.getState().game;
     this.setState({submitLoading: true});
     this.timer = setTimeout(() => {
       let self = this;
       const search = this.state.search.toLowerCase();
-      const newPlayerPromise = this.lookupPlayer(search, this.state.game);
+      const newPlayerPromise = this.lookupPlayer(search, currentGame);
       newPlayerPromise.then(function(newPlayer) {
         self.setState(prevState => {
           let newState = {
@@ -377,10 +381,11 @@ class Players extends Component {
   }
 
   componentDidMount() {
-    switch (this.state.game) {
+    const currentGame = store.getState().game;
+    switch (currentGame) {
       case 'fortnite':
         return this.state.getPlayers.map((handle, index) => {
-          const newPlayerPromise = this.lookupPlayer(handle, this.state.game);
+          const newPlayerPromise = this.lookupPlayer(handle, currentGame);
           let self = this;
           return newPlayerPromise.then(function(newPlayer) {
             self.setState(prevState => {
@@ -393,7 +398,7 @@ class Players extends Component {
         });
       case 'rocketLeague':
         return this.state.getPlayers.map((handle, index) => {
-          const newPlayer = this.lookupPlayer(handle, this.state.game);
+          const newPlayer = this.lookupPlayer(handle, currentGame);
           return this.setState(prevState => {
             return {
               players: [...prevState.players, newPlayer],
@@ -406,6 +411,8 @@ class Players extends Component {
   }
 
   render() {
+    const currentGame = store.getState().game;
+
     let comparePlayersRender = '';
     let isComparing = this.state.comparePlayers.length === 2;
     if (isComparing) {
@@ -439,7 +446,7 @@ class Players extends Component {
         return <Grid item xs={12} key={p.name + index} zeroMinWidth>
                   <Player
                     player={p}
-                    game={this.state.game}
+                    game={currentGame}
                     displayType={this.state.statsType}
                     clicked={this.comparePlayersHandler}
                     comparePlayers={this.state.comparePlayers}
@@ -449,7 +456,7 @@ class Players extends Component {
     );
     return (
       <Aux>
-        <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{this.state.game === 'rocketLeague' ? 'Rocket League' : this.state.game} Stats</h2>
+        <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
         <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
           {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
         </Button>
