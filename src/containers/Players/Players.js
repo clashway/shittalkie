@@ -10,8 +10,20 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircle from '@material-ui/icons/CheckCircle';
-import store from '../../store/index'
-import { changeGame } from '../../actions/index'
+import { connect } from 'react-redux';
+import { changeGame } from '../../actions/index';
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeGame: game => dispatch(changeGame(game))
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    game: state.game
+  }
+}
 
 class Players extends Component {
   state = {
@@ -44,10 +56,12 @@ class Players extends Component {
     });
   }
   gameToggleHandler = () => {
-    const currentGame = store.getState().game;
+    const currentGame = this.props.game;
     const newGame = currentGame === 'fortnite' ? 'rocketLeague' : 'fortnite';
-    store.dispatch( changeGame(newGame) );
     this.setState({players: []});
+
+    // Change Redux Store.
+    this.props.changeGame(newGame);
 
     let newPlayers = [];
     switch (newGame) {
@@ -114,7 +128,7 @@ class Players extends Component {
   }
 
   addPlayerHandler = () => {
-    const currentGame = store.getState().game;
+    const currentGame = this.props.game;
     this.setState({submitLoading: true});
     this.timer = setTimeout(() => {
       let self = this;
@@ -381,7 +395,7 @@ class Players extends Component {
   }
 
   componentDidMount() {
-    const currentGame = store.getState().game;
+    const currentGame = this.props.game;
     switch (currentGame) {
       case 'fortnite':
         return this.state.getPlayers.map((handle, index) => {
@@ -411,7 +425,7 @@ class Players extends Component {
   }
 
   render() {
-    const currentGame = store.getState().game;
+    const currentGame = this.props.game;
 
     let comparePlayersRender = '';
     let isComparing = this.state.comparePlayers.length === 2;
@@ -502,4 +516,4 @@ class Players extends Component {
   }
 }
 
-export default Players;
+export default connect(mapStateToProps, mapDispatchToProps)(Players);
