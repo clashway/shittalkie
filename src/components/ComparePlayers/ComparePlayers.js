@@ -40,19 +40,20 @@ const comparePlayers = (props) => {
           <DeleteIcon />
         </Button>
       </div>
-
-      <Grid container spacing={8} justify="center">
-        {props.players.map((p, index) => {
-          return <Grid item xs={6} key={p.name + index}>
-            <ComparePlayer
-              player={p}
-              comparer={comparer}
-              displayType={props.statsType}
-              playlistFilter={props.playlistFilter}
-              />
-          </Grid>
-        })}
-      </Grid>
+      <div className={classes.CompareGrid}>
+        <Grid container spacing={8} justify="center">
+          {props.players.map((p, index) => {
+            return <Grid item xs={6} key={p.name + index}>
+              <ComparePlayer
+                player={p}
+                comparer={comparer}
+                displayType={props.statsType}
+                playlistFilter={props.playlistFilter}
+                />
+            </Grid>
+          })}
+        </Grid>
+      </div>
     </div>
   );
 }

@@ -470,10 +470,12 @@ class Players extends Component {
     );
     return (
       <Aux>
-        <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
-        <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
-          {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
-        </Button>
+        <div className={classes.PrimaryNav}>
+          <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
+          <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
+            {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
+          </Button>
+        </div>
         { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField
             error={this.state.submitError ? true : false}

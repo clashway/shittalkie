@@ -1,10 +1,15 @@
 .ComparePlayers {
+  display: inline-block;
+  text-align: center;
   width: 90%;
-  margin-left: 5%;
+  max-width: 660px;
   padding-bottom: 50px;
 }
 .CompareNav {
   margin-bottom: 20px
+}
+.CompareGrid {
+
 }
 .CompareTitle {
   display: inline-block;

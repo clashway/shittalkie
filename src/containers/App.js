@@ -14,7 +14,6 @@ class App extends Component {
         <Provider store={store}>
           <Players />
         </Provider>
-
       </div>
     );
   }
