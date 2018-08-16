@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import classes from './App.css';
 import Players from './Players/Players'
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Provider } from 'react-redux';
+import store from '../store/index'
 
 class App extends Component {
   render() {
@@ -9,7 +11,10 @@ class App extends Component {
       <div className={classes.App}>
         <CssBaseline />
         <h1>Wall of Shame</h1>
-        <Players />
+        <Provider store={store}>
+          <Players />
+        </Provider>
+
       </div>
     );
   }
