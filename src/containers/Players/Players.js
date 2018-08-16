@@ -49,7 +49,8 @@ class Players extends Component {
     let newPlayers = [];
     switch (newGame) {
       case 'fortnite':
-        if (this.state.fortNitePlayers.length === 0) {
+      newPlayers = [...this.state.fortNitePlayers];
+      if (this.state.fortNitePlayers.length === 0) {
           let self = this;
           return this.state.getPlayers.map((handle, index) => {
             const newPlayerPromise = self.lookupPlayer(handle, newGame);
@@ -63,11 +64,9 @@ class Players extends Component {
             });
           });
         }
-        else {
-          newPlayers = [...this.state.fortNitePlayers];
-        }
         break;
       case 'rocketLeague':
+        newPlayers = [...this.state.rocketLeaguePlayers];
         if (this.state.rocketLeaguePlayers.length === 0) {
           let self = this;
           return this.state.getPlayers.map((handle, index) => {
@@ -79,9 +78,6 @@ class Players extends Component {
               }
             });
           });
-        }
-        else {
-          newPlayers = [...this.state.rocketLeaguePlayers];
         }
         break;
       default:
