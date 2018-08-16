@@ -41,7 +41,7 @@ class Player extends Component {
         if (!self.props.player[displayKey][playlistKey]) {
           return;
         }
-        playlists.push(<Grid item md={itemSize} key={playlistKey}>
+        playlists.push(<Grid item xs={6} md={itemSize} key={playlistKey}>
             <Card classes={{root: classes.Card}} raised={false}>
               <CardContent>
                 <Playlist name={playlistKey} playlist={self.props.player[displayKey][playlistKey]} />

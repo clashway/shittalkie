@@ -43,7 +43,7 @@ const comparePlayers = (props) => {
 
       <Grid container spacing={8} justify="center">
         {props.players.map((p, index) => {
-          return <Grid item sm={6} md={props.playlistFilter ? 6 : 12} lg={6} key={p.name + index}>
+          return <Grid item xs={6} key={p.name + index}>
             <ComparePlayer
               player={p}
               comparer={comparer}

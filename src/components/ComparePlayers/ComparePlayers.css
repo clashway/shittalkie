@@ -1,4 +1,6 @@
 .ComparePlayers {
+  width: 90%;
+  margin-left: 5%;
   padding-bottom: 50px;
 }
 .CompareNav {

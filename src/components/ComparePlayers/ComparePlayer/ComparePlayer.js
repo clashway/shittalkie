@@ -40,20 +40,12 @@ const comparePlayer = (props) => {
     }
     else {
       playlists = [];
-      const numPlaylists = Object.keys(props.player[displayKey]).length;
       const playlistArray = ['solo', 'duo', 'squad'];
-      let itemSize = 4;
-      if (numPlaylists === 2) {
-        itemSize = 6;
-      }
-      if (numPlaylists === 1) {
-        itemSize = 12;
-      }
       playlistArray.forEach(function(playlistKey) {
         if (!props.player[displayKey][playlistKey]) {
           return;
         }
-        playlists.push(<Grid item xs={12} md={itemSize} key={playlistKey}>
+        playlists.push(<Grid item xs={12} key={playlistKey}>
             <Card classes={{root: classes.Card}} raised={false}>
               <CardContent>
                 <Playlist
@@ -74,7 +66,7 @@ const comparePlayer = (props) => {
   }
   return (
     <div className={playerClasses.join(' ')} onClick={props.clicked ? () => props.clicked(props.player.handle) : null}>
-      <Grid container spacing={8} justify="center">
+      <Grid container spacing={24} justify="center">
         <Grid item xs={12}>
           <Typography align="center" variant="title" gutterBottom>
             {props.player.name}
