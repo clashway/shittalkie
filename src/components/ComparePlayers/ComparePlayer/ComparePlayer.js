@@ -24,7 +24,7 @@ const comparePlayer = (props) => {
       playlists = (
         <Aux>
           <Grid item xs={12}>
-            <Card>
+            <Card classes={{root: classes.Card}} raised={false}>
               <CardContent>
                 <Playlist
                   name={props.playlistFilter}
