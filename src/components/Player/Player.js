@@ -58,18 +58,18 @@ class Player extends Component {
     let playlists = [];
     playlists.push(
         <Grid item xs={6} key="ranks">
-          <Card>
+          <Card classes={{root: classes.Card}} raised={false}>
             <CardContent>
-              <Playlist name={'Ranks'} playlist={this.props.player[this.props.displayType]} />
+              <Playlist name={'Summary'} playlist={this.props.player[this.props.displayType]} />
             </CardContent>
           </Card>
         </Grid>
     );
     playlists.push(
         <Grid item xs={6} key="summary">
-          <Card>
+          <Card classes={{root: classes.Card}} raised={false}>
             <CardContent>
-              <Playlist name={'Summary'} playlist={this.props.player[this.props.displayType]} />
+              <Playlist name={'Ranks'} playlist={this.props.player.ranks} ranks={true} />
             </CardContent>
           </Card>
         </Grid>

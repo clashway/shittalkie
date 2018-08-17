@@ -10,12 +10,24 @@
 .Red {
   color: red !important;
 }
+.RankImage {
+  width: 30px;
+  height: 30px;
+}
+.RankDivision {
+  padding-left: 5px;
+  position: absolute;
+  margin-top: 10px;
+}
 @media screen and (max-width: 680px) {
   .Playlist {
     margin-left: -18px;
   }
   .PlaylistTitle {
     margin-left: 29px;
+  }
+  .RankDivision {
+    display:none;
   }
 }
 @media screen and (max-width: 420px) {
