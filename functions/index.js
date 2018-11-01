@@ -36,7 +36,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
     let playerRecord = null;
     const playerRef = admin.database().ref(`/playerStats/${pHandle}`);
-    return playerRef.on('value', function(data) {
+    return playerRef.on('value', function (data) {
       if (data.exists()) {
         playerRecord = data.val();
         if (currentTime > (playerRecord.created + UPDATE_LIVE_STATS_INTERVAL)) {
@@ -48,7 +48,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Every 24 hours update old stats.
             if (playerRecord.oldStats) {
-              if (currentTime > (playerRecord.oldStats.created + UPDATE_OLD_STATS_INTERVAL) ) {
+              if (currentTime > (playerRecord.oldStats.created + UPDATE_OLD_STATS_INTERVAL)) {
                 jsonBody.oldStats = playerRecord.stats;
                 jsonBody.oldStats.created = playerRecord.created;
                 console.log('Replaced old stats.');
@@ -91,3 +91,15 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     });
   });
 });
+
+exports.hourly_job = functions.pubsub
+  .topic('hourly-tick')
+  .onPublish((message) => {
+    const options = {
+      url: 'https://shitalkie-591a0.firebaseapp.com'
+    };
+    request.get(options, function (error, response, body) {
+      console.log('pinged website');
+    });
+    return true;
+  });
