@@ -37,7 +37,7 @@ class Players extends Component {
     ],
     // This will be the renderable players array.
     players: [],
-    fortnitePlayers: [],
+    fortNitePlayers: [],
     rocketLeaguePlayers: [],
     statsType: 'lastNight',
     search: '',
