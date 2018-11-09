@@ -20,7 +20,7 @@ const comparePlayer = (props) => {
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
 
     let displayKey = props.displayType;
-    if (props.playlistFilter) {
+    if (props.playlistFilter && props.player[displayKey][props.playlistFilter]) {
       playlists = (
         <Aux>
           <Grid item xs={12}>

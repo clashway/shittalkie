@@ -58,6 +58,9 @@ class Players extends Component {
   gameToggleHandler = () => {
     const currentGame = this.props.game;
     const newGame = currentGame === 'fortnite' ? 'rocketLeague' : 'fortnite';
+    if (this.state.comparePlayers.length > 0) {
+      return;
+    }
     this.setState({players: []});
 
     // Change Redux Store.

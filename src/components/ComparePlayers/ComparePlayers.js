@@ -17,6 +17,9 @@ const comparePlayers = (props) => {
     if (playlist === 'updated') {
       return;
     }
+    if (!player2[props.statsType][playlist]) {
+      return;
+    }
     Object.keys(player1[props.statsType][playlist]).forEach(function (stat) {
       comparer[props.statsType][playlist][stat] =
         Number(player1[props.statsType][playlist][stat]) > Number(player2[props.statsType][playlist][stat])
