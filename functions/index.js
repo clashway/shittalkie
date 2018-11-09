@@ -51,14 +51,14 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
               if (currentTime > (playerRecord.oldStats.created + UPDATE_OLD_STATS_INTERVAL)) {
                 jsonBody.oldStats = playerRecord.stats;
                 jsonBody.oldStats.created = playerRecord.created;
-                console.log('Replaced old stats.');
+                // console.log('Replaced old stats.');
               } else {
                 jsonBody.oldStats = playerRecord.oldStats;
-                console.log('Carried over old stats');
+                // console.log('Carried over old stats');
               }
             } else {
               jsonBody.oldStats = {};
-              console.log('didnt have oldstats');
+              // console.log('didnt have oldstats');
             }
 
             // Write new results.
@@ -95,11 +95,16 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 exports.hourly_job = functions.pubsub
   .topic('hourly-tick')
   .onPublish((message) => {
-    const options = {
-      url: 'https://shitalkie-591a0.firebaseapp.com'
-    };
-    request.get(options, function (error, response, body) {
-      console.log('pinged website');
+    const baseUrl = 'https://us-central1-shitalkie-591a0.cloudfunctions.net/getPlayer?player=';
+    const players = [
+      'lash24',
+      'daemon chaos',
+      'xvhand of godvx',
+      'captainobvs13',
+      'chapper_15'
+    ];
+    players.forEach((player) => {
+      request.get(baseUrl + player);
     });
     return true;
   });
