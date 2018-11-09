@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import classes from './Player.css';
 import Playlist from '../Playlist/Playlist'
-import Aux from '../../hoc/Aux'
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -12,45 +11,43 @@ class Player extends Component {
   getFortnitePlaylists = () => {
     let playlists = null;
     let displayKey = this.props.displayType;
+
     if (this.props.playlistFilter) {
-      playlists = (
-        <Aux>
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Playlist name={this.props.playlistFilter} playlist={this.props.player[displayKey][this.props.playlistFilter]} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Aux>
+      return (
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Playlist name={this.props.playlistFilter} playlist={this.props.player[displayKey][this.props.playlistFilter]} />
+            </CardContent>
+          </Card>
+        </Grid>
       );
     }
-    else {
-      playlists = [];
-      const numPlaylists = Object.keys(this.props.player[displayKey]).length;
-      const playlistArray = ['solo', 'duo', 'squad'];
-      let itemSize = 4;
-      if (numPlaylists === 2) {
-        itemSize = 6;
-      }
-      if (numPlaylists === 1) {
-        itemSize = 12;
-      }
-      const self = this;
-      playlistArray.forEach(function(playlistKey) {
-        if (!self.props.player[displayKey][playlistKey]) {
-          return;
-        }
-        playlists.push(<Grid item xs={6} md={itemSize} key={playlistKey}>
-            <Card classes={{root: classes.Card}} raised={false}>
-              <CardContent>
-                <Playlist name={playlistKey} playlist={self.props.player[displayKey][playlistKey]} />
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-      });
+
+    playlists = [];
+    const numPlaylists = Object.keys(this.props.player[displayKey]).length;
+    const playlistArray = ['solo', 'duo', 'squad'];
+    let itemSize = 4;
+    if (numPlaylists === 2) {
+      itemSize = 6;
     }
+    if (numPlaylists === 1) {
+      itemSize = 12;
+    }
+    const self = this;
+    playlistArray.forEach(function(playlistKey) {
+      if (!self.props.player[displayKey][playlistKey]) {
+        return;
+      }
+      playlists.push(<Grid item xs={6} md={itemSize} key={playlistKey}>
+          <Card classes={{root: classes.Card}} raised={false}>
+            <CardContent>
+              <Playlist name={playlistKey} playlist={self.props.player[displayKey][playlistKey]} />
+            </CardContent>
+          </Card>
+        </Grid>
+      );
+    });
     return playlists;
   }
 
