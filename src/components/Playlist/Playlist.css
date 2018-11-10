@@ -4,6 +4,9 @@
 .PlaylistTitle {
 
 }
+.PlaylistTable {
+  margin-left: 15px;
+}
 .Green {
   color: green !important;
 }

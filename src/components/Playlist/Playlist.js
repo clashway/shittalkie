@@ -27,7 +27,7 @@ const playlist = (props) => {
       }
       return (
         <TableRow key={stat}>
-          <TableCell component="th" scope="row">
+          <TableCell component="th" scope="row" padding="dense">
             {stat}
           </TableCell>
           <TableCell numeric>
@@ -40,7 +40,7 @@ const playlist = (props) => {
   return (
     <div className={classes.Playlist}>
       <h3 className={classes.PlaylistTitle}>{props.name.toUpperCase()}</h3>
-      <Table>
+      <Table classes={{root: classes.PlaylistTable}}>
         <TableBody>
           {tableRows}
         </TableBody>

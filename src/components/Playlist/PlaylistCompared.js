@@ -11,7 +11,7 @@ const playlistCompared = (props) => {
   let tableRows = Object.keys(props.playlist).map(function(stat, key) {
     return (
       <TableRow key={stat}>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" padding="dense">
           {stat}
         </TableCell>
         <TableCell classes={props.comparer[stat] === props.player ? winner : props.comparer[stat] !== 'tie' ? loser : null} numeric>
@@ -23,7 +23,7 @@ const playlistCompared = (props) => {
   return (
     <div className={classes.Playlist}>
       <h3 className={classes.PlaylistTitle}>{props.name.toUpperCase()}</h3>
-      <Table>
+      <Table classes={{root: classes.PlaylistTable}}>
         <TableBody>
           {tableRows}
         </TableBody>
