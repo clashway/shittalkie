@@ -37,6 +37,7 @@ class Players extends Component {
     ],
     // This will be the renderable players array.
     players: [],
+    playersLoading: false,
     fortNitePlayers: [],
     rocketLeaguePlayers: [],
     statsType: 'lastNight',
@@ -401,29 +402,40 @@ class Players extends Component {
 
   componentDidMount() {
     const currentGame = this.props.game;
+    if (this.state.getPlayers.length <= 0) {
+      return;
+    }
+    this.setState({ playersLoading: true });
     switch (currentGame) {
       case 'fortnite':
         return this.state.getPlayers.map((handle, index) => {
           const newPlayerPromise = this.lookupPlayer(handle, currentGame);
           let self = this;
-          return newPlayerPromise.then(function(newPlayer) {
-            self.setState(prevState => {
-              return {
-                players: [...prevState.players, newPlayer],
-                fortNitePlayers: [...prevState.players, newPlayer]
-              }
-            });
+          return newPlayerPromise.then(function (newPlayer) {
+            setTimeout(function () {
+              self.setState(prevState => {
+                return {
+                  playersLoading: false,
+                  players: [...prevState.players, newPlayer],
+                  fortNitePlayers: [...prevState.players, newPlayer]
+                }
+              });
+            }, 1500);
           });
         });
       case 'rocketLeague':
         return this.state.getPlayers.map((handle, index) => {
+          let self = this;
           const newPlayer = this.lookupPlayer(handle, currentGame);
-          return this.setState(prevState => {
-            return {
-              players: [...prevState.players, newPlayer],
-              rocketLeaguePlayers: [...prevState.players, newPlayer]
-            }
-          });
+          setTimeout(function () {
+            self.setState(prevState => {
+              return {
+                playersLoading: false,
+                players: [...prevState.players, newPlayer],
+                rocketLeaguePlayers: [...prevState.players, newPlayer]
+              }
+            });
+          }, 1500);
         });
       default:
     }
@@ -521,7 +533,7 @@ class Players extends Component {
             alignItems="center"
             spacing={24}
             >
-            {players}
+            {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players }
           </Grid>
 
         </div>  : null}

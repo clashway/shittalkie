@@ -38,7 +38,7 @@ const Player = (props) => {
       if (!props.player[displayKey][playlistKey]) {
         return;
       }
-      playlists.push(<Grid item xs={6} md={itemSize} key={playlistKey}>
+      playlists.push(<Grid item xs={6} sm={itemSize} key={playlistKey}>
           <Card classes={{root: classes.Card}} raised={false}>
             <CardContent>
               <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
