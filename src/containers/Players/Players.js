@@ -102,11 +102,7 @@ class Players extends Component {
         break;
       default:
     }
-    this.setState((prevState) => {
-      return {
-        players: newPlayers
-      };
-    });
+    this.setState({ players: newPlayers });
   }
 
   comparePlayersHandler = (handle) => {
@@ -123,7 +119,10 @@ class Players extends Component {
   }
 
   clearCompareHandler = () => {
-    this.setState({comparePlayers: []});
+    this.setState({
+      comparePlayers: [],
+      playlistFilter: ''
+    });
   }
 
   playlistFilterHandler = (event) => {

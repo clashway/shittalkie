@@ -1,8 +1,14 @@
+h1 {
+  margin-bottom: 0;
+}
 .MainTitle {
   display: inline-block;
   text-transform: capitalize;
   margin-right: 10px;
   font-size: 32px;
+}
+.PrimaryNav {
+  margin-bottom: 0;
 }
 .SearchArea {
   margin-bottom: 20px;
