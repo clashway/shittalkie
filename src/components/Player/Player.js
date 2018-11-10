@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './Player.css';
 import Playlist from '../Playlist/Playlist'
 import moment from 'moment';

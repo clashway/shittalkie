@@ -427,7 +427,7 @@ class Players extends Component {
         return this.state.getPlayers.map((handle, index) => {
           let self = this;
           const newPlayer = this.lookupPlayer(handle, currentGame);
-          setTimeout(function () {
+          return setTimeout(function () {
             self.setState(prevState => {
               return {
                 playersLoading: false,
