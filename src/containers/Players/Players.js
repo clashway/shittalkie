@@ -131,6 +131,9 @@ class Players extends Component {
   }
 
   addPlayerHandler = () => {
+    if (!this.state.search) {
+      return;
+    }
     const currentGame = this.props.game;
     this.setState({submitLoading: true});
     this.timer = setTimeout(() => {
