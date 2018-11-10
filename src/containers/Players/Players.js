@@ -432,13 +432,12 @@ class Players extends Component {
 
   render() {
     const currentGame = this.props.game;
-
+    const comparePlayers = this.state.comparePlayers;
+    const currentPlayers = this.state.players;
     let comparePlayersRender = '';
     let isComparing = this.state.comparePlayers.length === 2;
+    let activeCompare = [];
     if (isComparing) {
-      const comparePlayers = this.state.comparePlayers;
-      const currentPlayers = this.state.players;
-      let activeCompare = [];
       currentPlayers.forEach(function (player) {
         if (comparePlayers.indexOf(player.handle) !== -1) {
           activeCompare.push(player);
@@ -452,8 +451,16 @@ class Players extends Component {
         cleared={this.clearCompareHandler}
         gutterBottom />;
     }
-    else if (this.state.comparePlayers.length === 0){
-      comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>click a player to start comparing</Typography>
+    else {
+      if (this.state.comparePlayers.length === 0) {
+        comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>
+          click a player to start comparing
+        </Typography>
+      } else {
+        comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>
+          <strong>now click a second player to compare</strong>
+        </Typography>
+      }
     }
 
     let buttonClasses = [classes.SearchButton];
