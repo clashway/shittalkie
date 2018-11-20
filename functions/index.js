@@ -16,9 +16,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     const pHandle = req.query.player;
 
     // Time calculations.
-    const ONE_HOUR = 60 * 60 * 1000;
     const ONE_MINUTE = 60 * 1000;
-    const UPDATE_OLD_STATS_INTERVAL = 24 * ONE_HOUR;
     const UPDATE_LIVE_STATS_INTERVAL = 15 * ONE_MINUTE;
 
     // Get current time.
@@ -48,17 +46,9 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
             // Every 24 hours update old stats.
             if (playerRecord.oldStats) {
-              if (currentTime > (playerRecord.oldStats.created + UPDATE_OLD_STATS_INTERVAL)) {
-                jsonBody.oldStats = playerRecord.stats;
-                jsonBody.oldStats.created = playerRecord.created;
-                // console.log('Replaced old stats.');
-              } else {
-                jsonBody.oldStats = playerRecord.oldStats;
-                // console.log('Carried over old stats');
-              }
+              jsonBody.oldStats = playerRecord.oldStats;
             } else {
               jsonBody.oldStats = {};
-              // console.log('didnt have oldstats');
             }
 
             // Write new results.
@@ -95,7 +85,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 exports.hourly_job = functions.pubsub
   .topic('hourly-tick')
   .onPublish((message) => {
-    const baseUrl = 'https://us-central1-shitalkie-591a0.cloudfunctions.net/getPlayer?player=';
+    const hourToReset = 15;
     const players = [
       'lash24',
       'daemon chaos',
@@ -103,8 +93,49 @@ exports.hourly_job = functions.pubsub
       'captainobvs13',
       'chapper_15'
     ];
+    let date = new Date();
+    const currentTime = date.getTime();
+    const currentHour = date.getHours();
+
+    // Only reset on this hour.
+    if (currentHour !== hourToReset) {
+      return false;
+    }
+
     players.forEach((player) => {
-      request.get(baseUrl + player);
+      const options = {
+        url: 'https://api.fortnitetracker.com/v1/profile/xbl/' + player,
+        headers: {
+          'TRN-Api-Key': '883c5178-3127-46a1-82b5-f5faad23262c',
+          'Content-Type': 'application/json'
+        }
+      };
+      const playerRef = admin.database().ref(`/playerStats/${player}`);
+      let playerRecord = null;
+      return playerRef.on('value', function (data) {
+        if (!data.exists()) {
+          return false;
+        }
+        playerRecord = data.val();
+        request.get(options, function (error, response, body) {
+          let jsonBody = JSON.parse(body);
+
+          // Modify the new results for write.
+          jsonBody.created = currentTime;
+
+          // Every 24 hours update old stats.
+          if (playerRecord.oldStats) {
+            jsonBody.oldStats = playerRecord.stats;
+            jsonBody.oldStats.created = playerRecord.created;
+          } else {
+            jsonBody.oldStats = {};
+          }
+
+          // Write new results.
+          playerRef.set(jsonBody);
+          console.log('reset stats for ' + player);
+        });
+      });
     });
     return true;
   });
