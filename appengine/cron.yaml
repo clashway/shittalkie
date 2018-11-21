@@ -1,4 +1,4 @@
 cron:
-- description: Push a "tick" onto pubsub each day at 2pm
+- description: Push a "tick" onto pubsub each day at 2pm est
   url: /publish/reset-stats-tick
-  schedule: every day 14:00
+  schedule: every day 19:00
