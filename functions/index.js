@@ -94,15 +94,7 @@ exports.reset_stats = functions.pubsub
     ];
     let date = new Date();
     let currentTime = date.getTime();
-    console.log('started job');
     players.forEach((player) => {
-      const options = {
-        url: 'https://api.fortnitetracker.com/v1/profile/xbl/' + player,
-        headers: {
-          'TRN-Api-Key': '883c5178-3127-46a1-82b5-f5faad23262c',
-          'Content-Type': 'application/json'
-        }
-      };
       const playerRef = admin.database().ref(`/playerStats/${player}`);
       let playerRecord = null;
       return playerRef.on('value', function (data) {
@@ -111,24 +103,11 @@ exports.reset_stats = functions.pubsub
           return false;
         }
         playerRecord = data.val();
-        request.get(options, function (error, response, body) {
-          let jsonBody = JSON.parse(body);
-
-          // Modify the new results for write.
-          jsonBody.created = currentTime;
-
-          // Every 24 hours update old stats.
-          if (playerRecord.oldStats) {
-            jsonBody.oldStats = playerRecord.stats;
-            jsonBody.oldStats.created = playerRecord.created;
-          } else {
-            jsonBody.oldStats = {};
-          }
-
-          // Write new results.
-          playerRef.set(jsonBody);
-          console.log('reset stats for ' + player);
-        });
+        playerRecord.created = currentTime;
+        playerRecord.oldStats = playerRecord.stats;
+        playerRecord.oldStats.created = playerRecord.created;
+        playerRef.set(playerRecord);
+        console.log('reset stats for ' + player);
       });
     });
     return true;
