@@ -82,10 +82,9 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.hourly_job = functions.pubsub
-  .topic('hourly-tick')
+exports.reset_stats = functions.pubsub
+  .topic('reset-stats-tick')
   .onPublish((message) => {
-    const hourToReset = 15;
     const players = [
       'lash24',
       'daemon chaos',
@@ -94,14 +93,8 @@ exports.hourly_job = functions.pubsub
       'chapper_15'
     ];
     let date = new Date();
-    const currentTime = date.getTime();
-    const currentHour = date.getHours();
-
-    // Only reset on this hour.
-    if (currentHour !== hourToReset) {
-      return false;
-    }
-
+    let currentTime = date.getTime();
+    console.log('started job');
     players.forEach((player) => {
       const options = {
         url: 'https://api.fortnitetracker.com/v1/profile/xbl/' + player,
@@ -114,6 +107,7 @@ exports.hourly_job = functions.pubsub
       let playerRecord = null;
       return playerRef.on('value', function (data) {
         if (!data.exists()) {
+          console.log('no data there');
           return false;
         }
         playerRecord = data.val();
