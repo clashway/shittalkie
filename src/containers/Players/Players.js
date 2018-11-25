@@ -213,6 +213,7 @@ class Players extends Component {
         handle = 'xvhand of godvx';
         break;
       case 'chap':
+      case 'chapper15':
       case 'chapper_15':
         name = 'Chap';
         handle = 'chapper_15';
