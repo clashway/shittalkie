@@ -7,7 +7,6 @@ import Axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import { connect } from 'react-redux';
@@ -62,7 +61,7 @@ class Players extends Component {
     if (this.state.comparePlayers.length > 0) {
       return;
     }
-    this.setState({players: []});
+    this.setState({ players: [] });
 
     // Change Redux Store.
     this.props.changeGame(newGame);
@@ -75,7 +74,7 @@ class Players extends Component {
           let self = this;
           return this.state.getPlayers.map((handle, index) => {
             const newPlayerPromise = self.lookupPlayer(handle, newGame);
-            return newPlayerPromise.then(function(newPlayer) {
+            return newPlayerPromise.then(function (newPlayer) {
               self.setState(prevState => {
                 return {
                   players: [...prevState.players, newPlayer],
@@ -116,7 +115,7 @@ class Players extends Component {
     } else {
       items.splice(exists, 1);
     }
-    this.setState({comparePlayers: items});
+    this.setState({ comparePlayers: items });
   }
 
   clearCompareHandler = () => {
@@ -127,7 +126,7 @@ class Players extends Component {
   }
 
   playlistFilterHandler = (event) => {
-    this.setState({playlistFilter: event.target.value});
+    this.setState({ playlistFilter: event.target.value });
   }
 
   addPlayerHandler = () => {
@@ -135,12 +134,12 @@ class Players extends Component {
       return;
     }
     const currentGame = this.props.game;
-    this.setState({submitLoading: true});
+    this.setState({ submitLoading: true });
     this.timer = setTimeout(() => {
       let self = this;
       const search = this.state.search.toLowerCase();
       const newPlayerPromise = this.lookupPlayer(search, currentGame);
-      newPlayerPromise.then(function(newPlayer) {
+      newPlayerPromise.then(function (newPlayer) {
         self.setState(prevState => {
           let newState = {
             submitLoading: false,
@@ -152,13 +151,28 @@ class Players extends Component {
             newState.submitError = newPlayer.error;
           } else {
             newState.players = [newPlayer, ...prevState.players];
+            newState.getPlayers = [newPlayer.handle, ...prevState.getPlayers];
             newState.search = '';
           }
+          localStorage.setItem('getPlayers', JSON.stringify(newState.getPlayers));
           return newState;
         });
       });
     }, 2000)
+  }
 
+  removePlayerHandler = (name) => {
+    this.setState(prevState => {
+      let players = [...prevState.players];
+      let getPlayers = [...prevState.getPlayers];
+      const playersRemoved = players.filter(player => player.handle !== name);
+      const getPlayersRemoved = getPlayers.filter(getPlayer => getPlayer !== name);
+      localStorage.setItem('getPlayers', JSON.stringify(getPlayersRemoved));
+      return {
+        players: playersRemoved,
+        getPlayers: getPlayersRemoved
+      };
+    });
   }
 
   searchFieldHandler = (event) => {
@@ -178,23 +192,30 @@ class Players extends Component {
   lookupPlayer = (handle, game) => {
     let name = '';
     switch (handle) {
+      case 'cappy':
       case 'captainobvs13':
         name = 'Cappy';
+        handle = 'captainobvs13';
         break;
+      case 'wes':
       case 'daemon chaos':
         name = 'Wes';
+        handle = 'daemon chaos';
         break;
+      case 'lash':
       case 'lash24':
         name = 'Lash';
+        handle = 'lash24';
         break;
+      case 'plage':
       case 'xvhand of godvx':
         name = 'Plage';
+        handle = 'xvhand of godvx';
         break;
+      case 'chap':
       case 'chapper_15':
         name = 'Chap';
-        break;
-      case 'gronky12':
-        name = 'GronkyHD';
+        handle = 'chapper_15';
         break;
       default:
         name = handle;
@@ -207,12 +228,12 @@ class Players extends Component {
     switch (game) {
       case 'fortnite':
         const newPlayerPromise = this.lookupFortnitePlayer(handle);
-        playerReturn = newPlayerPromise.then(function(newPlayer) {
-          return {...newPlayer, ...playerObj};
+        playerReturn = newPlayerPromise.then(function (newPlayer) {
+          return { ...newPlayer, ...playerObj };
         });
         break;
       case 'rocketLeague':
-        playerReturn = {...this.lookupRocketLeaguePlayer(handle), ...playerObj};
+        playerReturn = { ...this.lookupRocketLeaguePlayer(handle), ...playerObj };
         break;
       default:
     }
@@ -344,7 +365,7 @@ class Players extends Component {
         }
 
         // Set current season.
-        Object.keys(playerData.stats).forEach(function(key,index) {
+        Object.keys(playerData.stats).forEach(function (key, index) {
           let label = '';
           switch (key) {
             case 'curr_p2':
@@ -369,7 +390,7 @@ class Players extends Component {
         });
         if (playerData.oldStats) {
           playerObj.lastNight.updated = playerData.oldStats.created;
-          Object.keys(playerData.stats).forEach(function(key,index) {
+          Object.keys(playerData.stats).forEach(function (key, index) {
             let label = null;
             switch (key) {
               case 'curr_p2':
@@ -401,14 +422,23 @@ class Players extends Component {
   }
 
   componentDidMount() {
+    let playersMounted = [];
     const currentGame = this.props.game;
-    if (this.state.getPlayers.length <= 0) {
+    const storagePlayers = JSON.parse(localStorage.getItem('getPlayers')) || [];
+    if (storagePlayers.length) {
+      playersMounted = storagePlayers;
+      this.setState({ getPlayers: storagePlayers });
+    }
+    else {
+      playersMounted = this.state.getPlayers;
+    }
+    if (playersMounted.length <= 0) {
       return;
     }
     this.setState({ playersLoading: true });
     switch (currentGame) {
       case 'fortnite':
-        return this.state.getPlayers.map((handle, index) => {
+        return playersMounted.map((handle, index) => {
           const newPlayerPromise = this.lookupPlayer(handle, currentGame);
           let self = this;
           return newPlayerPromise.then(function (newPlayer) {
@@ -424,7 +454,7 @@ class Players extends Component {
           });
         });
       case 'rocketLeague':
-        return this.state.getPlayers.map((handle, index) => {
+        return playersMounted.map((handle, index) => {
           let self = this;
           const newPlayer = this.lookupPlayer(handle, currentGame);
           return setTimeout(function () {
@@ -462,17 +492,6 @@ class Players extends Component {
         cleared={this.clearCompareHandler}
         gutterBottom />;
     }
-    else {
-      if (this.state.comparePlayers.length === 0) {
-        comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>
-          click a player to start comparing
-        </Typography>
-      } else {
-        comparePlayersRender = <Typography variant="caption" className={classes.CompareHelper} gutterBottom>
-          <strong>now click a second player to compare</strong>
-        </Typography>
-      }
-    }
 
     let buttonClasses = [classes.SearchButton];
     if (this.state.submitLoading) {
@@ -482,25 +501,26 @@ class Players extends Component {
     let players = (
       this.state.players.map((p, index) => {
         return <Grid item xs={12} key={p.name + index} zeroMinWidth>
-                  <Player
-                    player={p}
-                    game={currentGame}
-                    displayType={this.state.statsType}
-                    clicked={this.comparePlayersHandler}
-                    comparePlayers={this.state.comparePlayers}
-                    />
-              </Grid>
+          <Player
+            player={p}
+            game={currentGame}
+            displayType={this.state.statsType}
+            clicked={this.comparePlayersHandler}
+            removed={this.removePlayerHandler}
+            comparePlayers={this.state.comparePlayers}
+          />
+        </Grid>
       })
     );
     return (
       <Aux>
         <div className={classes.PrimaryNav}>
           <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
-          <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{root: classes.StatsToggle }}>
+          <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
             {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
           </Button>
         </div>
-        { !isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+        {!isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           <TextField
             error={this.state.submitError ? true : false}
             helperText={this.state.submitError}
@@ -510,33 +530,33 @@ class Players extends Component {
             value={this.state.search}
             onChange={this.searchFieldHandler}
             onKeyPress={this.searchKeyPressHandler}
-            />
+          />
 
           <Button
-            classes={{root: buttonClasses.join(' ')}}
+            classes={{ root: buttonClasses.join(' ') }}
             variant="contained"
             color="primary"
             disabled={this.state.submitLoading}
             onClick={this.addPlayerHandler}>Search
           </Button>
-          {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null }
+          {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null}
           {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
         </form> : null}
 
-        { comparePlayersRender }
+        {comparePlayersRender}
         {!isComparing ?
 
           <div className={classes.Players}>
-          <Grid container
-            justify="center"
-            direction="column"
-            alignItems="center"
-            spacing={24}
+            <Grid container
+              justify="center"
+              direction="column"
+              alignItems="center"
+              spacing={24}
             >
-            {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players }
-          </Grid>
+              {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players}
+            </Grid>
 
-        </div>  : null}
+          </div> : null}
       </Aux>
     );
   }

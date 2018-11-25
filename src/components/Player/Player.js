@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import RemoveCircle from '@material-ui/icons/RemoveCircleOutline';
+import Button from '@material-ui/core/Button';
 
 const Player = (props) => {
   const getFortnitePlaylists = () => {
@@ -108,13 +110,23 @@ const Player = (props) => {
     playerClasses = [classes.Compared];
   }
   return (
-    <div className={playerClasses.join(' ')} onClick={props.clicked ? () => props.clicked(props.player.handle) : null}>
+    <div className={playerClasses.join(' ')}>
       <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
-          <Typography align="center" variant="title" gutterBottom>
+          <span className={classes.PlayerUtilitiesLeft}>
+            <Button onClick={props.clicked ? () => props.clicked(props.player.handle) : null} variant="text" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+              compare
+            </Button>
+          </span>
+          <Typography className={classes.PlayerName} variant="title" gutterBottom>
             {props.player.name}
           </Typography>
-          {timeOutput}
+          <span className={classes.PlayerUtilitiesRight}>
+            <RemoveCircle className={classes.PlayerRemoveButton} size={32} onClick={props.removed ? () => props.removed(props.player.handle) : null} />
+          </span>
+          <div className={classes.TimeInfo}>
+            {timeOutput}
+          </div>
         </Grid>
         {playlists}
       </Grid>

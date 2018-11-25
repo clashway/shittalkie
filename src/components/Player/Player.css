@@ -5,17 +5,36 @@
   background-color: #f1f2f6 !important;
   min-height: 100%;
 }
-.NextUpdate {
-  display:block;
+.PlayerName {
+  float: left;
+  width: 33.33%;
+  text-align: center;
 }
-.Player {
+.PlayerUtilitiesLeft {
+  float: left;
+  width: 33.33%;
+  text-align: left;
+}
+.PlayerUtilitiesRight {
+  width: 33.33%;
+  float: right;
+  padding-left: 10px;
+  text-align: right;
+}
+.PlayerRemoveButton {
 
 }
+.PlayerCompareButton {
+  margin-top: -5px !important;
+}
+.TimeInfo {
+  display: block;
+  clear: both;
+}
+.TimeInfo .NextUpdate {
+  display: block;
+}
 @media screen and (min-width: 768px) {
-  .Player:hover {
-    background-color: #c1d5e8;
-    cursor: pointer;
-  }
   .NextUpdate {
     display: inline-block;
   }
