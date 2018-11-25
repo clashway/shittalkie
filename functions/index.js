@@ -10,7 +10,6 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     // Set Response options.
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-    // res.status(200);
 
     // Set the query string.
     const pHandle = req.query.player;
@@ -34,7 +33,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
     let playerRecord = null;
     const playerRef = admin.database().ref(`/playerStats/${pHandle}`);
-    return playerRef.on('value', function (data) {
+    return playerRef.once('value', function (data) {
       if (data.exists()) {
         playerRecord = data.val();
         if (currentTime > (playerRecord.created + UPDATE_LIVE_STATS_INTERVAL)) {
@@ -84,31 +83,30 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
 exports.reset_stats = functions.pubsub
   .topic('reset-stats-tick')
-  .onPublish((message) => {
-    const players = [
-      'lash24',
-      'daemon chaos',
-      'xvhand of godvx',
-      'captainobvs13',
-      'chapper_15'
-    ];
+  .onPublish(message => {
     let date = new Date();
     let currentTime = date.getTime();
-    players.forEach((player) => {
-      const playerRef = admin.database().ref(`/playerStats/${player}`);
-      let playerRecord = null;
-      return playerRef.on('value', function (data) {
-        if (!data.exists()) {
-          console.log('no data there');
+    const playerRef = admin.database().ref('playerStats');
+    return playerRef.once('value').then(function (snapshot) {
+      if (!snapshot.exists()) {
+        console.log('no data there');
+        return false;
+      }
+      snapshot.forEach(function (data) {
+        let playerName = data.key;
+        let playerRecord = data.val();
+        if (!playerRecord.hasOwnProperty('stats')) {
           return false;
         }
-        playerRecord = data.val();
         playerRecord.created = currentTime;
         playerRecord.oldStats = playerRecord.stats;
         playerRecord.oldStats.created = playerRecord.created;
-        playerRef.set(playerRecord);
-        console.log('reset stats for ' + player);
+        writeData(playerName, playerRecord);
       });
     });
-    return true;
+
+    function writeData(name, record) {
+      admin.database().ref(`/playerStats/${name}`).set(record);
+      console.log('reset stats for ' + name);
+    }
   });
