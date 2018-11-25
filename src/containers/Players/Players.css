@@ -20,6 +20,10 @@ h1 {
 .StatsToggle {
   margin-bottom: 9px !important;
 }
+.ResetPlayers {
+  margin-bottom: 9px !important;
+  margin-right: 10px !important;
+}
 .GameToggle {
   margin-bottom: 9px !important;
   margin-left: 10px !important;

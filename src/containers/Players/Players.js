@@ -24,29 +24,32 @@ const mapStateToProps = state => {
   }
 }
 
+const defaultState = {
+  // Handles to retrieve.
+  getPlayers: [
+    'lash24',
+    'daemon chaos',
+    'xvhand of godvx',
+    'captainobvs13',
+    'chapper_15'
+  ],
+  // This will be the renderable players array.
+  players: [],
+  playersLoading: false,
+  fortNitePlayers: [],
+  rocketLeaguePlayers: [],
+  statsType: 'lastNight',
+  search: '',
+  comparePlayers: [],
+  playlistFilter: '',
+  submitLoading: false,
+  submitSuccess: false,
+  submitError: '',
+  rebuildStats: false,
+}
+
 class Players extends Component {
-  state = {
-    // Handles to retrieve.
-    getPlayers: [
-      'lash24',
-      'daemon chaos',
-      'xvhand of godvx',
-      'captainobvs13',
-      'chapper_15'
-    ],
-    // This will be the renderable players array.
-    players: [],
-    playersLoading: false,
-    fortNitePlayers: [],
-    rocketLeaguePlayers: [],
-    statsType: 'lastNight',
-    search: '',
-    comparePlayers: [],
-    playlistFilter: '',
-    submitLoading: false,
-    submitSuccess: false,
-    submitError: '',
-  }
+  state = defaultState;
 
   statsToggleHandler = () => {
     this.setState((prevState) => {
@@ -173,6 +176,11 @@ class Players extends Component {
         getPlayers: getPlayersRemoved
       };
     });
+  }
+
+  resetPlayersHandler = () => {
+    localStorage.setItem('getPlayers', JSON.stringify([]));
+    window.location.reload();
   }
 
   searchFieldHandler = (event) => {
@@ -516,6 +524,9 @@ class Players extends Component {
     return (
       <Aux>
         <div className={classes.PrimaryNav}>
+          <Button onClick={this.resetPlayersHandler} variant="outlined" color="secondary" classes={{ root: classes.ResetPlayers }}>
+            reset players
+          </Button>
           <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
           <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
             {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
