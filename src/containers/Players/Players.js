@@ -524,15 +524,15 @@ class Players extends Component {
     return (
       <Aux>
         <div className={classes.PrimaryNav}>
-          <Button onClick={this.resetPlayersHandler} variant="outlined" color="secondary" classes={{ root: classes.ResetPlayers }}>
-            reset players
-          </Button>
           <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
           <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
             {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
           </Button>
         </div>
         {!isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+          <Button onClick={this.resetPlayersHandler} size="small" variant="text" color="secondary" classes={{ root: classes.ResetPlayers }}>
+            reset players
+          </Button>
           <TextField
             error={this.state.submitError ? true : false}
             helperText={this.state.submitError}
