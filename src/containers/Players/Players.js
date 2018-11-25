@@ -501,7 +501,7 @@ class Players extends Component {
 
     let players = (
       this.state.players.map((p, index) => {
-        return <Grid item xs={12} key={p.name + index} zeroMinWidth>
+        return <Grid item xs={12} key={p.name + index}>
           <Player
             player={p}
             game={currentGame}
