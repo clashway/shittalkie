@@ -12,7 +12,8 @@ const comparePlayers = (props) => {
   const player2 = props.players[1];
 
   // Create comparer object.
-  let comparer = JSON.parse(JSON.stringify(player1))
+  // @todo need a better way of setting this comparer to only data we want.
+  let comparer = JSON.parse(JSON.stringify(player1));
   Object.keys(player1[props.statsType]).forEach(function (playlist) {
     if (playlist === 'updated') {
       return;
@@ -28,7 +29,6 @@ const comparePlayers = (props) => {
           ? 'tie': player2.name;
     });
   });
-
   return (
     <div className={classes.ComparePlayers}>
       <div className={classes.CompareNav}>

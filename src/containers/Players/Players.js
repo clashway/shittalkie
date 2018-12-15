@@ -31,7 +31,8 @@ const defaultState = {
     'daemon chaos',
     'xvhand of godvx',
     'captainobvs13',
-    'chapper_15'
+    'chapper_15',
+    'daddyfatsacksjr'
   ],
   // This will be the renderable players array.
   players: [],
