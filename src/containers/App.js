@@ -10,7 +10,6 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <CssBaseline />
-        <h1>Shitalkie</h1>
         <Provider store={store}>
           <Players />
         </Provider>

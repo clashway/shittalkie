@@ -227,6 +227,12 @@ class Players extends Component {
         name = 'Chap';
         handle = 'chapper_15';
         break;
+      case 'daddyfatsacksjr':
+      case 'daddy':
+      case 'dfs':
+        name = 'DFS';
+        handle = 'daddyfatsacksjr';
+        break;
       default:
         name = handle;
     }
@@ -528,52 +534,57 @@ class Players extends Component {
     );
     return (
       <Aux>
-        <div className={classes.PrimaryNav}>
-          <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
-          <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
-            {this.state.statsType === 'currentSeason' ? 'Totals' : 'Last 24 Hours'}
+        <header>
+          <div className={classes.PrimaryNav}>
+            <h1>Shitalkie</h1>
+            <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
+            <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
+              {this.state.statsType === 'currentSeason' ? 'Current Season' : 'Last Nite'}
+            </Button>
+          </div>
+          {!isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+            <Button onClick={this.resetPlayersHandler} size="small" variant="outlined" color="secondary" classes={{ root: classes.ResetPlayers }}>
+              reset players
           </Button>
-        </div>
-        {!isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
-          <Button onClick={this.resetPlayersHandler} size="small" variant="text" color="secondary" classes={{ root: classes.ResetPlayers }}>
-            reset players
+            <TextField
+              error={this.state.submitError ? true : false}
+              helperText={this.state.submitError}
+              className={classes.SearchField}
+              label="Add Player:"
+              placeholder="xbox handle"
+              value={this.state.search}
+              onChange={this.searchFieldHandler}
+              onKeyPress={this.searchKeyPressHandler}
+            />
+
+            <Button
+              classes={{ root: buttonClasses.join(' ') }}
+              variant="contained"
+              color="primary"
+              disabled={this.state.submitLoading}
+              onClick={this.addPlayerHandler}>Add
           </Button>
-          <TextField
-            error={this.state.submitError ? true : false}
-            helperText={this.state.submitError}
-            className={classes.SearchField}
-            label="Search Player:"
-            placeholder="xbox handle"
-            value={this.state.search}
-            onChange={this.searchFieldHandler}
-            onKeyPress={this.searchKeyPressHandler}
-          />
+            {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null}
+            {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
+          </form> : null}
 
-          <Button
-            classes={{ root: buttonClasses.join(' ') }}
-            variant="contained"
-            color="primary"
-            disabled={this.state.submitLoading}
-            onClick={this.addPlayerHandler}>Search
-          </Button>
-          {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null}
-          {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
-        </form> : null}
+          {comparePlayersRender}
+        </header>
+        <main>
+          {!isComparing ?
 
-        {comparePlayersRender}
-        {!isComparing ?
+            <div className={classes.Players}>
+              <Grid container
+                justify="center"
+                direction="column"
+                alignItems="center"
+                spacing={24}
+              >
+                {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players}
+              </Grid>
 
-          <div className={classes.Players}>
-            <Grid container
-              justify="center"
-              direction="column"
-              alignItems="center"
-              spacing={24}
-            >
-              {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players}
-            </Grid>
-
-          </div> : null}
+            </div> : null}
+        </main>
       </Aux>
     );
   }

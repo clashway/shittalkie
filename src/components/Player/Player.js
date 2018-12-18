@@ -114,7 +114,7 @@ const Player = (props) => {
       <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
           <span className={classes.PlayerUtilitiesLeft}>
-            <Button onClick={props.clicked ? () => props.clicked(props.player.handle) : null} variant="text" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+            <Button onClick={props.clicked ? () => props.clicked(props.player.handle) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
               compare
             </Button>
           </span>
@@ -122,7 +122,9 @@ const Player = (props) => {
             {props.player.name}
           </Typography>
           <span className={classes.PlayerUtilitiesRight}>
-            <RemoveCircle className={classes.PlayerRemoveButton} size={32} onClick={props.removed ? () => props.removed(props.player.handle) : null} />
+            <Button onClick={props.removed ? () => props.removed(props.player.handle) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+              remove
+            </Button>
           </span>
           <div className={classes.TimeInfo}>
             {timeOutput}
