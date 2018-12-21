@@ -6,13 +6,14 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import RemoveCircle from '@material-ui/icons/RemoveCircleOutline';
 import Button from '@material-ui/core/Button';
 
 const Player = (props) => {
   const getFortnitePlaylists = () => {
-    let playlists = null;
-    let displayKey = props.displayType;
+    const displayKey = props.displayType;
+    const playlistArray = ['solo', 'duo', 'squad'];
+    let playlists = [];
+    const itemSize = 4;
 
     if (props.playlistFilter) {
       return (
@@ -26,16 +27,6 @@ const Player = (props) => {
       );
     }
 
-    playlists = [];
-    const numPlaylists = Object.keys(props.player[displayKey]).length;
-    const playlistArray = ['solo', 'duo', 'squad'];
-    let itemSize = 4;
-    if (numPlaylists === 2) {
-      itemSize = 6;
-    }
-    if (numPlaylists === 1) {
-      itemSize = 12;
-    }
     playlistArray.forEach(function(playlistKey) {
       if (!props.player[displayKey][playlistKey]) {
         return;

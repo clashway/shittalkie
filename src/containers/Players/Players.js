@@ -336,44 +336,18 @@ class Players extends Component {
   }
 
   lookupFortnitePlayer = (handle) => {
-    let name = '';
-    switch (handle) {
-      case 'captainobvs13':
-        name = 'Cappy';
-        break;
-      case 'daemon chaos':
-        name = 'Wes';
-        break;
-      case 'lash24':
-        name = 'Lash';
-        break;
-      case 'xvhand of godvx':
-        name = 'Plage';
-        break;
-      case 'chapper_15':
-        name = 'Chap';
-        break;
-      case 'gronky12':
-        name = 'GronkyHD';
-        break;
-      default:
-        name = handle;
-    }
     const reqPath = "https://shitalkie-591a0.firebaseapp.com/api/getPlayer?player=";
-    // const reqPath = '/api/getPlayer?player=';
     return Axios.get(reqPath + handle).then((response) => {
       const playerData = response.data;
       let playerObj = {};
       if (playerData.error) {
         playerObj = {
           handle: handle,
-          name: name,
           error: playerData.error
         };
       } else {
         playerObj = {
           handle: handle,
-          name: name,
           currentSeason: {
             updated: playerData.created
           },
@@ -381,59 +355,69 @@ class Players extends Component {
         }
 
         // Set current season.
-        Object.keys(playerData.stats).forEach(function (key, index) {
+        Object.keys(playerData.stats).forEach(function (playlist) {
           let label = '';
-          switch (key) {
+          let choke = null;
+          switch (playlist) {
             case 'curr_p2':
               label = 'solo';
-              break;
-            case 'curr_p9':
-              label = 'squad';
+              choke = playerData.stats[playlist].top10.value;
               break;
             case 'curr_p10':
               label = 'duo';
+              choke = playerData.stats[playlist].top5.value;
+              break;
+            case 'curr_p9':
+              label = 'squad';
+              choke = playerData.stats[playlist].top3.value;
               break;
             default:
               return;
           }
           playerObj.currentSeason[label] = {
-            games: playerData.stats[key].matches.value,
-            kills: playerData.stats[key].kills.value,
-            kd: playerData.stats[key].kd.value,
-            kpg: playerData.stats[key].kpg.value,
-            wins: playerData.stats[key].top1.value,
+            games: playerData.stats[playlist].matches.value,
+            kills: playerData.stats[playlist].kills.value,
+            kd: playerData.stats[playlist].kd.value,
+            kpg: playerData.stats[playlist].kpg.value,
+            wins: playerData.stats[playlist].top1.value,
+            chokes: choke,
           }
         });
+
+        // Set Last nite stats.
         if (playerData.oldStats) {
           playerObj.lastNight.updated = playerData.oldStats.created;
-          Object.keys(playerData.stats).forEach(function (key, index) {
+          Object.keys(playerData.stats).forEach(function (playlist) {
             let label = null;
-            switch (key) {
+            let choke = null;
+            switch (playlist) {
               case 'curr_p2':
                 label = 'solo';
-                break;
-              case 'curr_p9':
-                label = 'squad';
+                choke = 'top10';
                 break;
               case 'curr_p10':
                 label = 'duo';
+                choke = 'top5';
+                break;
+              case 'curr_p9':
+                label = 'squad';
+                choke = 'top3';
                 break;
               default:
                 return;
             }
-            if (playerData.oldStats[key] && playerData.stats[key]) {
+            if (playerData.oldStats[playlist] && playerData.stats[playlist]) {
               playerObj.lastNight[label] = {
-                games: playerData.stats[key].matches.value - playerData.oldStats[key].matches.value,
-                kills: playerData.stats[key].kills.value - playerData.oldStats[key].kills.value,
-                kpg: Math.round(((playerData.stats[key].kills.value - playerData.oldStats[key].kills.value) / (playerData.stats[key].matches.value - playerData.oldStats[key].matches.value)) * 100) / 100,
-                wins: playerData.stats[key].top1.value - playerData.oldStats[key].top1.value,
+                games: playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value,
+                kills: playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value,
+                kpg: Math.round(((playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value) / (playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value)) * 100) / 100,
+                wins: playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value,
+                chokes: playerData.stats[playlist][choke].value - playerData.oldStats[playlist][choke].value,
               }
               if (isNaN(playerObj.lastNight[label].kpg)) {
                 playerObj.lastNight[label].kpg = 0;
               }
             }
-
-
           });
         }
       }
@@ -562,7 +546,8 @@ class Players extends Component {
               variant="contained"
               color="primary"
               disabled={this.state.submitLoading}
-              onClick={this.addPlayerHandler}>Add
+              onClick={this.addPlayerHandler}>
+              Add
           </Button>
             {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null}
             {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
@@ -572,17 +557,14 @@ class Players extends Component {
         </header>
         <main>
           {!isComparing ?
-
             <div className={classes.Players}>
               <Grid container
                 justify="center"
                 direction="column"
                 alignItems="center"
-                spacing={24}
-              >
+                spacing={24}>
                 {this.state.playersLoading ? <CircularProgress size={64} className={classes.PlayersCircularProgress} /> : players}
               </Grid>
-
             </div> : null}
         </main>
       </Aux>

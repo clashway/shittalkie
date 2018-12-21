@@ -22,9 +22,6 @@ const playlist = (props) => {
       );
     }
     else {
-      if (stat === 'updated') {
-        return false;
-      }
       return (
         <TableRow key={stat}>
           <TableCell component="th" scope="row" padding="dense">
