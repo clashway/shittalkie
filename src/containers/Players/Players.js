@@ -380,7 +380,7 @@ class Players extends Component {
             kd: playerData.stats[playlist].kd.value,
             kpg: playerData.stats[playlist].kpg.value,
             wins: playerData.stats[playlist].top1.value,
-            chokes: choke,
+            chokes: choke - playerData.stats[playlist].top1.value,
           }
         });
 
@@ -412,7 +412,7 @@ class Players extends Component {
                 kills: playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value,
                 kpg: Math.round(((playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value) / (playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value)) * 100) / 100,
                 wins: playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value,
-                chokes: playerData.stats[playlist][choke].value - playerData.oldStats[playlist][choke].value,
+                chokes: (playerData.stats[playlist][choke].value - playerData.oldStats[playlist][choke].value) - (playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value),
               }
               if (isNaN(playerObj.lastNight[label].kpg)) {
                 playerObj.lastNight[label].kpg = 0;
