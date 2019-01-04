@@ -7,6 +7,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import XboxIcon from '../../assets/icons/xbox.png';
+import PcIcon from '../../assets/icons/pc.png';
 
 const Player = (props) => {
   const getFortnitePlaylists = () => {
@@ -27,17 +29,17 @@ const Player = (props) => {
       );
     }
 
-    playlistArray.forEach(function(playlistKey) {
+    playlistArray.forEach(function (playlistKey) {
       if (!props.player[displayKey][playlistKey]) {
         return;
       }
       playlists.push(<Grid item xs={6} sm={itemSize} key={playlistKey}>
-          <Card classes={{root: classes.Card}} raised={false}>
-            <CardContent>
-              <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
-            </CardContent>
-          </Card>
-        </Grid>
+        <Card classes={{ root: classes.Card }} raised={false}>
+          <CardContent>
+            <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
+          </CardContent>
+        </Card>
+      </Grid>
       );
     });
     return playlists;
@@ -46,22 +48,22 @@ const Player = (props) => {
   const getRocketLeaguePlaylists = () => {
     let playlists = [];
     playlists.push(
-        <Grid item xs={6} key="ranks">
-          <Card classes={{root: classes.Card}} raised={false}>
-            <CardContent>
-              <Playlist name={'Summary'} playlist={props.player[props.displayType]} />
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid item xs={6} key="ranks">
+        <Card classes={{ root: classes.Card }} raised={false}>
+          <CardContent>
+            <Playlist name={'Summary'} playlist={props.player[props.displayType]} />
+          </CardContent>
+        </Card>
+      </Grid>
     );
     playlists.push(
-        <Grid item xs={6} key="summary">
-          <Card classes={{root: classes.Card}} raised={false}>
-            <CardContent>
-              <Playlist name={'Ranks'} playlist={props.player.ranks} ranks={true} />
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid item xs={6} key="summary">
+        <Card classes={{ root: classes.Card }} raised={false}>
+          <CardContent>
+            <Playlist name={'Ranks'} playlist={props.player.ranks} ranks={true} />
+          </CardContent>
+        </Card>
+      </Grid>
     );
     return playlists;
   }
@@ -77,12 +79,29 @@ const Player = (props) => {
       nextUpdate = moment(new Date(endDate)).add(15, 'm');
       nextUpdate = moment(nextUpdate).format('hh:mma');
       output = (<Typography variant="caption" gutterBottom>
-                {rangeString} <span className={classes.NextUpdate}>(next update at {nextUpdate})</span>
-              </Typography>
+        {rangeString} <span className={classes.NextUpdate}>(next update at {nextUpdate})</span>
+      </Typography>
       );
     }
     return output;
   }
+  const timeOutput = getTimeOutput();
+
+  const getPlatformOutput = () => {
+    let platformRender;
+    switch (props.player.platform) {
+      case 'xbl':
+        platformRender = <img className={classes.PlatformImage} src={XboxIcon} alt="xbox" />;
+        break;
+      case 'pc':
+        platformRender = <img className={classes.PlatformImage} src={PcIcon} alt="pc" />;
+        break;
+      default:
+        platformRender = '';
+    }
+    return platformRender;
+  }
+  const platformRender = getPlatformOutput();
 
   let playlists = null;
   switch (props.game) {
@@ -94,12 +113,12 @@ const Player = (props) => {
       break;
     default:
   }
-  const timeOutput = getTimeOutput();
 
   let playerClasses = [classes.Player];
   if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
     playerClasses = [classes.Compared];
   }
+
   return (
     <div className={playerClasses.join(' ')}>
       <Grid container spacing={16} justify="center">
@@ -109,8 +128,9 @@ const Player = (props) => {
               compare
             </Button>
           </span>
-          <Typography className={classes.PlayerName} variant="title" gutterBottom>
-            {props.player.name}
+          <Typography className={classes.PlayerHeading} variant="title" gutterBottom>
+            <span className={classes.PlayerName}>{props.player.name}</span>
+            <span className={classes.PlayerPlatform}>{platformRender}</span>
           </Typography>
           <span className={classes.PlayerUtilitiesRight}>
             <Button onClick={props.removed ? () => props.removed(props.player.handle) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>

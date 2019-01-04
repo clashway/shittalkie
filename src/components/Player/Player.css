@@ -5,11 +5,25 @@
   background-color: #f1f2f6 !important;
   min-height: 100%;
 }
-.PlayerName {
+
+.PlayerHeading {
   float: left;
   width: 33.33%;
   text-align: center;
 }
+.PlayerPlatform,
+.PlayerName {
+  display: inline-block;
+  vertical-align: middle;
+}
+.PlayerName {
+  padding-right: 10px;
+}
+.PlatformImage {
+  width: 25px;
+  height: 25px;
+}
+
 .PlayerUtilitiesLeft {
   float: left;
   width: 33.33%;
@@ -27,6 +41,7 @@
 .PlayerCompareButton {
   margin-top: -5px !important;
 }
+
 .TimeInfo {
   display: block;
   clear: both;

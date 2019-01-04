@@ -27,12 +27,13 @@ const mapStateToProps = state => {
 const defaultState = {
   // Handles to retrieve.
   getPlayers: [
-    'lash24',
-    'daemon chaos',
-    'xvhand of godvx',
-    'captainobvs13',
-    'chapper_15',
-    'daddyfatsacksjr'
+    { handle: 'lash24', platform: 'xbl' },
+    { handle: 'lash24', platform: 'pc' },
+    { handle: 'daemon chaos', platform: 'xbl' },
+    { handle: 'xvhand of godvx', platform: 'xbl' },
+    { handle: 'captainobvs13', platform: 'xbl' },
+    { handle: 'chapper_15', platform: 'xbl' },
+    { handle: 'daddyfatsacksjr', platform: 'xbl' },
   ],
   // This will be the renderable players array.
   players: [],
@@ -76,8 +77,8 @@ class Players extends Component {
         newPlayers = [...this.state.fortNitePlayers];
         if (this.state.fortNitePlayers.length === 0) {
           let self = this;
-          return this.state.getPlayers.map((handle, index) => {
-            const newPlayerPromise = self.lookupPlayer(handle, newGame);
+          return this.state.getPlayers.map((player, index) => {
+            const newPlayerPromise = self.lookupPlayer(player.handle, newGame);
             return newPlayerPromise.then(function (newPlayer) {
               self.setState(prevState => {
                 return {
@@ -93,8 +94,8 @@ class Players extends Component {
         newPlayers = [...this.state.rocketLeaguePlayers];
         if (this.state.rocketLeaguePlayers.length === 0) {
           let self = this;
-          return this.state.getPlayers.map((handle, index) => {
-            const newPlayer = self.lookupPlayer(handle, newGame);
+          return this.state.getPlayers.map((player, index) => {
+            const newPlayer = self.lookupPlayer(player.handle, newGame);
             return self.setState(prevState => {
               return {
                 players: [...prevState.players, newPlayer],
@@ -155,7 +156,7 @@ class Players extends Component {
             newState.submitError = newPlayer.error;
           } else {
             newState.players = [newPlayer, ...prevState.players];
-            newState.getPlayers = [newPlayer.handle, ...prevState.getPlayers];
+            newState.getPlayers = [{ handle: newPlayer.handle, platform: 'xbl' }, ...prevState.getPlayers];
             newState.search = '';
           }
           localStorage.setItem('getPlayers', JSON.stringify(newState.getPlayers));
@@ -170,7 +171,7 @@ class Players extends Component {
       let players = [...prevState.players];
       let getPlayers = [...prevState.getPlayers];
       const playersRemoved = players.filter(player => player.handle !== name);
-      const getPlayersRemoved = getPlayers.filter(getPlayer => getPlayer !== name);
+      const getPlayersRemoved = getPlayers.filter(getPlayer => getPlayer.handle !== name);
       localStorage.setItem('getPlayers', JSON.stringify(getPlayersRemoved));
       return {
         players: playersRemoved,
@@ -198,7 +199,7 @@ class Players extends Component {
     }
   }
 
-  lookupPlayer = (handle, game) => {
+  lookupPlayer = (handle, game, platform = 'xbl') => {
     let name = '';
     switch (handle) {
       case 'cappy':
@@ -243,7 +244,7 @@ class Players extends Component {
     let playerReturn = {};
     switch (game) {
       case 'fortnite':
-        const newPlayerPromise = this.lookupFortnitePlayer(handle);
+        const newPlayerPromise = this.lookupFortnitePlayer(handle, platform);
         playerReturn = newPlayerPromise.then(function (newPlayer) {
           return { ...newPlayer, ...playerObj };
         });
@@ -335,91 +336,99 @@ class Players extends Component {
     }
   }
 
-  lookupFortnitePlayer = (handle) => {
-    const reqPath = "https://shitalkie-591a0.firebaseapp.com/api/getPlayer?player=";
-    return Axios.get(reqPath + handle).then((response) => {
+  lookupFortnitePlayer = (handle, platform) => {
+    const reqPath = "https://shitalkie-591a0.firebaseapp.com/api/getPlayer";
+    return Axios.get(reqPath, {
+      params: {
+        player: handle,
+        platform: platform
+      }
+    }).then((response) => {
       const playerData = response.data;
       let playerObj = {};
+
+      // If error, return early.
       if (playerData.error) {
-        playerObj = {
+        return {
           handle: handle,
+          platform: platform,
           error: playerData.error
         };
-      } else {
-        playerObj = {
-          handle: handle,
-          currentSeason: {
-            updated: playerData.created
-          },
-          lastNight: {}
-        }
+      }
+      playerObj = {
+        handle: handle,
+        platform: platform,
+        currentSeason: {
+          updated: playerData.created
+        },
+        lastNight: {}
+      }
 
-        // Set current season.
+      // Set current season.
+      Object.keys(playerData.stats).forEach(function (playlist) {
+        let label = '';
+        let choke = null;
+        switch (playlist) {
+          case 'curr_p2':
+            label = 'solo';
+            choke = playerData.stats[playlist].top10.value;
+            break;
+          case 'curr_p10':
+            label = 'duo';
+            choke = playerData.stats[playlist].top5.value;
+            break;
+          case 'curr_p9':
+            label = 'squad';
+            choke = playerData.stats[playlist].top3.value;
+            break;
+          default:
+            return;
+        }
+        playerObj.currentSeason[label] = {
+          games: playerData.stats[playlist].matches.value,
+          kills: playerData.stats[playlist].kills.value,
+          kd: playerData.stats[playlist].kd.value,
+          kpg: playerData.stats[playlist].kpg.value,
+          wins: playerData.stats[playlist].top1.value,
+          chokes: choke - playerData.stats[playlist].top1.value,
+        }
+      });
+
+      // Set Last nite stats.
+      if (playerData.oldStats) {
+        playerObj.lastNight.updated = playerData.oldStats.created;
         Object.keys(playerData.stats).forEach(function (playlist) {
-          let label = '';
+          let label = null;
           let choke = null;
           switch (playlist) {
             case 'curr_p2':
               label = 'solo';
-              choke = playerData.stats[playlist].top10.value;
+              choke = 'top10';
               break;
             case 'curr_p10':
               label = 'duo';
-              choke = playerData.stats[playlist].top5.value;
+              choke = 'top5';
               break;
             case 'curr_p9':
               label = 'squad';
-              choke = playerData.stats[playlist].top3.value;
+              choke = 'top3';
               break;
             default:
               return;
           }
-          playerObj.currentSeason[label] = {
-            games: playerData.stats[playlist].matches.value,
-            kills: playerData.stats[playlist].kills.value,
-            kd: playerData.stats[playlist].kd.value,
-            kpg: playerData.stats[playlist].kpg.value,
-            wins: playerData.stats[playlist].top1.value,
-            chokes: choke - playerData.stats[playlist].top1.value,
+          if (playerData.oldStats[playlist] && playerData.stats[playlist]) {
+            playerObj.lastNight[label] = {
+              games: playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value,
+              kills: playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value,
+              kpg: Math.round(((playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value) / (playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value)) * 100) / 100,
+              wins: playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value,
+              chokes: (playerData.stats[playlist][choke].value - playerData.oldStats[playlist][choke].value) - (playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value),
+            }
+            if (isNaN(playerObj.lastNight[label].kpg)) {
+              playerObj.lastNight[label].kpg = 0;
+            }
           }
         });
-
-        // Set Last nite stats.
-        if (playerData.oldStats) {
-          playerObj.lastNight.updated = playerData.oldStats.created;
-          Object.keys(playerData.stats).forEach(function (playlist) {
-            let label = null;
-            let choke = null;
-            switch (playlist) {
-              case 'curr_p2':
-                label = 'solo';
-                choke = 'top10';
-                break;
-              case 'curr_p10':
-                label = 'duo';
-                choke = 'top5';
-                break;
-              case 'curr_p9':
-                label = 'squad';
-                choke = 'top3';
-                break;
-              default:
-                return;
-            }
-            if (playerData.oldStats[playlist] && playerData.stats[playlist]) {
-              playerObj.lastNight[label] = {
-                games: playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value,
-                kills: playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value,
-                kpg: Math.round(((playerData.stats[playlist].kills.value - playerData.oldStats[playlist].kills.value) / (playerData.stats[playlist].matches.value - playerData.oldStats[playlist].matches.value)) * 100) / 100,
-                wins: playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value,
-                chokes: (playerData.stats[playlist][choke].value - playerData.oldStats[playlist][choke].value) - (playerData.stats[playlist].top1.value - playerData.oldStats[playlist].top1.value),
-              }
-              if (isNaN(playerObj.lastNight[label].kpg)) {
-                playerObj.lastNight[label].kpg = 0;
-              }
-            }
-          });
-        }
       }
       return playerObj;
     });
@@ -442,8 +451,8 @@ class Players extends Component {
     this.setState({ playersLoading: true });
     switch (currentGame) {
       case 'fortnite':
-        return playersMounted.map((handle, index) => {
-          const newPlayerPromise = this.lookupPlayer(handle, currentGame);
+        return playersMounted.map((playerMounted, index) => {
+          const newPlayerPromise = this.lookupPlayer(playerMounted.handle, currentGame, playerMounted.platform);
           let self = this;
           return newPlayerPromise.then(function (newPlayer) {
             setTimeout(function () {
