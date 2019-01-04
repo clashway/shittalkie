@@ -13,6 +13,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
     // Set the query string.
     const pHandle = req.query.player;
+    const platform = req.query.platform || 'xbl';
 
     // Time calculations.
     const ONE_MINUTE = 60 * 1000;
@@ -24,7 +25,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
 
     // Request options.
     const options = {
-      url: 'https://api.fortnitetracker.com/v1/profile/xbl/' + pHandle,
+      url: 'https://api.fortnitetracker.com/v1/profile/' + platform + '/' + pHandle,
       headers: {
         'TRN-Api-Key': '883c5178-3127-46a1-82b5-f5faad23262c',
         'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
     };
 
     let playerRecord = null;
-    const playerRef = admin.database().ref(`/playerStats/${pHandle}`);
+    const playerRef = admin.database().ref(`/playerStats/${platform}/${pHandle}`);
     return playerRef.once('value', function (data) {
       if (data.exists()) {
         playerRecord = data.val();
@@ -81,32 +82,38 @@ exports.getPlayer = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.reset_stats = functions.pubsub
+exports.resetStats = functions.pubsub
   .topic('reset-stats-tick')
   .onPublish(message => {
     let date = new Date();
     let currentTime = date.getTime();
-    const playerRef = admin.database().ref('playerStats');
-    return playerRef.once('value').then(function (snapshot) {
-      if (!snapshot.exists()) {
-        console.log('no data there');
-        return false;
-      }
-      snapshot.forEach(function (data) {
-        let playerName = data.key;
-        let playerRecord = data.val();
-        if (!playerRecord.hasOwnProperty('stats')) {
+    const platforms = ['xbl', 'pc'];
+
+    var resetStats = function(platform) {
+      let playerRef = admin.database().ref('playerStats/' + platform);
+      return playerRef.once('value').then(function (snapshot) {
+        if (!snapshot.exists()) {
+          console.log('no data for ' + platform);
           return false;
         }
-        playerRecord.created = currentTime;
-        playerRecord.oldStats = playerRecord.stats;
-        playerRecord.oldStats.created = playerRecord.created;
-        writeData(playerName, playerRecord);
+        snapshot.forEach(function (data) {
+          let playerName = data.key;
+          let playerRecord = data.val();
+          if (!playerRecord.hasOwnProperty('stats')) {
+            return false;
+          }
+          playerRecord.created = currentTime;
+          playerRecord.oldStats = playerRecord.stats;
+          playerRecord.oldStats.created = playerRecord.created;
+          admin.database().ref(`/playerStats/${platform}/${playerName}`).set(playerRecord);
+          console.log('reset stats for ' + playerName);
+        });
       });
+    }
+
+    platforms.forEach(function (platform) {
+      resetStats(platform);
     });
 
-    function writeData(name, record) {
-      admin.database().ref(`/playerStats/${name}`).set(record);
-      console.log('reset stats for ' + name);
-    }
+    return true;
   });
