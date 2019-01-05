@@ -23,12 +23,10 @@ const comparePlayer = (props) => {
   if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
     playerClasses = [classes.Compared];
   }
-  console.log(props.comparer);
   playlistArray.forEach(function(playlistKey) {
     if (!props.player[displayKey][playlistKey] || !props.comparer[displayKey][playlistKey]) {
       return;
     }
-    console.log(playlistKey, props.player[displayKey][playlistKey], props.comparer[displayKey][playlistKey]);
     playlists.push(
       <Grid item xs={12} key={playlistKey}>
         <Card classes={{root: classes.Card}} raised={false}>

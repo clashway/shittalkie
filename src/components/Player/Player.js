@@ -133,7 +133,7 @@ const Player = (props) => {
             <span className={classes.PlayerPlatform}>{platformRender}</span>
           </Typography>
           <span className={classes.PlayerUtilitiesRight}>
-            <Button onClick={props.removed ? () => props.removed(props.player.handle) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+            <Button onClick={props.removed ? () => props.removed(props.player.handle, props.player.platform) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
               remove
             </Button>
           </span>

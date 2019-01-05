@@ -60,6 +60,7 @@ class Players extends Component {
       };
     });
   }
+
   gameToggleHandler = () => {
     const currentGame = this.props.game;
     const newGame = currentGame === 'fortnite' ? 'rocketLeague' : 'fortnite';
@@ -166,12 +167,23 @@ class Players extends Component {
     }, 2000)
   }
 
-  removePlayerHandler = (name) => {
+  removePlayerHandler = (name, platform) => {
     this.setState(prevState => {
       let players = [...prevState.players];
       let getPlayers = [...prevState.getPlayers];
-      const playersRemoved = players.filter(player => player.handle !== name);
-      const getPlayersRemoved = getPlayers.filter(getPlayer => getPlayer.handle !== name);
+      const playersRemoved = players.filter(function (player) {
+        if (player.handle === name && player.platform === platform) {
+          return false;
+        }
+        return true;
+      });
+
+      const getPlayersRemoved = getPlayers.filter(function (player) {
+        if (player.handle === name && player.platform === platform) {
+          return false;
+        }
+        return true;
+      });
       localStorage.setItem('getPlayers', JSON.stringify(getPlayersRemoved));
       return {
         players: playersRemoved,
