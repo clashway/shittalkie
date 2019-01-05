@@ -88,7 +88,13 @@ const Player = (props) => {
   }
 
   let playerClasses = [classes.Player];
-  if (props.comparePlayers && props.comparePlayers.indexOf(props.player.handle) !== -1) {
+  var isCompared = props.comparePlayers.some(function (comparePlayer) {
+    if (comparePlayer.handle === props.player.handle && comparePlayer.platform === props.player.platform) {
+      return true;
+    }
+    return false;
+  });
+  if (props.comparePlayers && isCompared) {
     playerClasses = [classes.Compared];
   }
 

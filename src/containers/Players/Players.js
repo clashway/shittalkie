@@ -34,6 +34,7 @@ const defaultState = {
     { handle: 'captainobvs13', platform: 'xbl' },
     { handle: 'chapper_15', platform: 'xbl' },
     { handle: 'daddyfatsacksjr', platform: 'xbl' },
+    { handle: 'ninja', platform: 'pc'},
   ],
   // This will be the renderable players array.
   players: [],
@@ -418,7 +419,7 @@ class Players extends Component {
             </Button>
             <TextField
               error={this.state.submitError ? true : false}
-              helperText={this.state.submitError}
+              helperText={this.state.submitError ? this.state.submitError : 'for pc add (pc) -- "ninja (pc)"' }
               className={classes.SearchField}
               label="Add Player:"
               placeholder="handle"
