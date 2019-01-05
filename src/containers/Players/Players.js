@@ -94,11 +94,12 @@ class Players extends Component {
       return;
     }
     const currentGame = this.props.game;
+    const platform = this.state.search.includes('(pc)') ? 'pc' : 'xbl';
     this.setState({ submitLoading: true });
     this.timer = setTimeout(() => {
       let self = this;
-      const search = this.state.search.toLowerCase();
-      const newPlayerPromise = this.lookupPlayer(search, currentGame);
+      const search = this.state.search.toLowerCase().replace('(pc)', '').trim();
+      const newPlayerPromise = this.lookupPlayer(search, currentGame, platform);
       newPlayerPromise.then(function (newPlayer) {
         self.setState(prevState => {
           let newState = {
@@ -113,8 +114,8 @@ class Players extends Component {
             newState.players = [newPlayer, ...prevState.players];
             newState.getPlayers = [{ handle: newPlayer.handle, platform: 'xbl' }, ...prevState.getPlayers];
             newState.search = '';
+            localStorage.setItem('getPlayers', JSON.stringify(newState.getPlayers));
           }
-          localStorage.setItem('getPlayers', JSON.stringify(newState.getPlayers));
           return newState;
         });
       });
