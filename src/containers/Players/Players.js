@@ -39,7 +39,6 @@ const defaultState = {
   players: [],
   playersLoading: false,
   fortNitePlayers: [],
-  rocketLeaguePlayers: [],
   statsType: 'lastNight',
   search: '',
   comparePlayers: [],
@@ -61,62 +60,17 @@ class Players extends Component {
     });
   }
 
-  gameToggleHandler = () => {
-    const currentGame = this.props.game;
-    const newGame = currentGame === 'fortnite' ? 'rocketLeague' : 'fortnite';
-    if (this.state.comparePlayers.length > 0) {
-      return;
-    }
-    this.setState({ players: [] });
-
-    // Change Redux Store.
-    this.props.changeGame(newGame);
-
-    let newPlayers = [];
-    switch (newGame) {
-      case 'fortnite':
-        newPlayers = [...this.state.fortNitePlayers];
-        if (this.state.fortNitePlayers.length === 0) {
-          let self = this;
-          return this.state.getPlayers.map((player, index) => {
-            const newPlayerPromise = self.lookupPlayer(player.handle, newGame);
-            return newPlayerPromise.then(function (newPlayer) {
-              self.setState(prevState => {
-                return {
-                  players: [...prevState.players, newPlayer],
-                  fortNitePlayers: [...prevState.players, newPlayer]
-                }
-              });
-            });
-          });
-        }
-        break;
-      case 'rocketLeague':
-        newPlayers = [...this.state.rocketLeaguePlayers];
-        if (this.state.rocketLeaguePlayers.length === 0) {
-          let self = this;
-          return this.state.getPlayers.map((player, index) => {
-            const newPlayer = self.lookupPlayer(player.handle, newGame);
-            return self.setState(prevState => {
-              return {
-                players: [...prevState.players, newPlayer],
-                rocketLeaguePlayers: [...prevState.players, newPlayer]
-              }
-            });
-          });
-        }
-        break;
-      default:
-    }
-    this.setState({ players: newPlayers });
-  }
-
-  comparePlayersHandler = (handle) => {
+  comparePlayersHandler = (handle, platform) => {
     const items = [...this.state.comparePlayers];
-    const exists = items.indexOf(handle);
-    if (exists === -1) {
+    const exists = items.filter(function (item) {
+      if (item.handle === handle && item.platform === platform) {
+        return true;
+      }
+      return false;
+    });
+    if (!exists.length) {
       if (items.length <= 1) {
-        items.push(handle);
+        items.push({handle: handle, platform: platform});
       }
     } else {
       items.splice(exists, 1);
@@ -261,91 +215,9 @@ class Players extends Component {
           return { ...newPlayer, ...playerObj };
         });
         break;
-      case 'rocketLeague':
-        playerReturn = { ...this.lookupRocketLeaguePlayer(handle), ...playerObj };
-        break;
       default:
     }
     return playerReturn;
-  }
-
-  lookupRocketLeaguePlayer = (playerObj) => {
-    const playerData = {
-      created: 1534342692889,
-      stats: {
-        wins: 555,
-        goals: 666,
-        mvps: 777,
-        saves: 888,
-        shots: 123,
-        assists: 444
-      },
-      oldStats: {
-        updated: 1534269698721,
-        wins: 553,
-        goals: 662,
-        mvps: 774,
-        saves: 881,
-        shots: 121,
-        assists: 441
-      },
-      ranks: {
-        solo: {
-          tier: 8,
-          division: 2
-        },
-        duo: {
-          tier: 10,
-          division: 0
-        },
-        threes: {
-          tier: 4,
-          division: 3
-        },
-        solo3s: {
-          tier: 9,
-          division: 4
-        }
-      }
-    }
-    return {
-      currentSeason: {
-        updated: playerData.created,
-        wins: playerData.stats.wins,
-        goals: playerData.stats.goals,
-        mvps: playerData.stats.mvps,
-        saves: playerData.stats.saves,
-        shots: playerData.stats.shots,
-        assists: playerData.stats.assists
-      },
-      lastNight: {
-        updated: playerData.oldStats.updated,
-        wins: playerData.stats.wins - playerData.oldStats.wins,
-        goals: playerData.stats.goals - playerData.oldStats.goals,
-        mvps: playerData.stats.mvps - playerData.oldStats.mvps,
-        saves: playerData.stats.saves - playerData.oldStats.saves,
-        shots: playerData.stats.shots - playerData.oldStats.shots,
-        assists: playerData.stats.assists - playerData.oldStats.assists
-      },
-      ranks: {
-        solo: {
-          tier: 8,
-          division: 2
-        },
-        duo: {
-          tier: 10,
-          division: 0
-        },
-        threes: {
-          tier: 4,
-          division: 3
-        },
-        solo3s: {
-          tier: 9,
-          division: 4
-        }
-      }
-    }
   }
 
   lookupFortnitePlayer = (handle, platform) => {
@@ -478,20 +350,6 @@ class Players extends Component {
             }, 1500);
           });
         });
-      case 'rocketLeague':
-        return playersMounted.map((handle, index) => {
-          let self = this;
-          const newPlayer = this.lookupPlayer(handle, currentGame);
-          return setTimeout(function () {
-            self.setState(prevState => {
-              return {
-                playersLoading: false,
-                players: [...prevState.players, newPlayer],
-                rocketLeaguePlayers: [...prevState.players, newPlayer]
-              }
-            });
-          }, 1500);
-        });
       default:
     }
   }
@@ -505,7 +363,13 @@ class Players extends Component {
     let activeCompare = [];
     if (isComparing) {
       currentPlayers.forEach(function (player) {
-        if (comparePlayers.indexOf(player.handle) !== -1) {
+        var exists = comparePlayers.some(function (comparePlayer) {
+          if (comparePlayer.handle === player.handle && comparePlayer.platform === player.platform) {
+            return true;
+          }
+          return false;
+        });
+        if (exists) {
           activeCompare.push(player);
         }
       });
@@ -542,7 +406,7 @@ class Players extends Component {
         <header>
           <div className={classes.PrimaryNav}>
             <h1>Shitalkie</h1>
-            <h2 className={classes.MainTitle} onClick={this.gameToggleHandler}>{currentGame === 'rocketLeague' ? 'Rocket League' : currentGame} Stats</h2>
+            <h2 className={classes.MainTitle}>{currentGame} Stats</h2>
             <Button onClick={this.statsToggleHandler} variant="outlined" color="secondary" classes={{ root: classes.StatsToggle }}>
               {this.state.statsType === 'currentSeason' ? 'Current Season' : 'Last Nite'}
             </Button>
@@ -550,18 +414,17 @@ class Players extends Component {
           {!isComparing ? <form className={classes.SearchArea} noValidate autoComplete="off" onSubmit={(e) => e.preventDefault()}>
             <Button onClick={this.resetPlayersHandler} size="small" variant="outlined" color="secondary" classes={{ root: classes.ResetPlayers }}>
               reset players
-          </Button>
+            </Button>
             <TextField
               error={this.state.submitError ? true : false}
               helperText={this.state.submitError}
               className={classes.SearchField}
               label="Add Player:"
-              placeholder="xbox handle"
+              placeholder="handle"
               value={this.state.search}
               onChange={this.searchFieldHandler}
               onKeyPress={this.searchKeyPressHandler}
             />
-
             <Button
               classes={{ root: buttonClasses.join(' ') }}
               variant="contained"
@@ -569,7 +432,7 @@ class Players extends Component {
               disabled={this.state.submitLoading}
               onClick={this.addPlayerHandler}>
               Add
-          </Button>
+            </Button>
             {this.state.submitSuccess ? <CheckCircle color="action" className={classes.CheckCircle} /> : null}
             {this.state.submitLoading && <CircularProgress size={24} className={classes.CircularProgress} />}
           </form> : null}

@@ -44,30 +44,6 @@ const Player = (props) => {
     });
     return playlists;
   }
-
-  const getRocketLeaguePlaylists = () => {
-    let playlists = [];
-    playlists.push(
-      <Grid item xs={6} key="ranks">
-        <Card classes={{ root: classes.Card }} raised={false}>
-          <CardContent>
-            <Playlist name={'Summary'} playlist={props.player[props.displayType]} />
-          </CardContent>
-        </Card>
-      </Grid>
-    );
-    playlists.push(
-      <Grid item xs={6} key="summary">
-        <Card classes={{ root: classes.Card }} raised={false}>
-          <CardContent>
-            <Playlist name={'Ranks'} playlist={props.player.ranks} ranks={true} />
-          </CardContent>
-        </Card>
-      </Grid>
-    );
-    return playlists;
-  }
-
   const getTimeOutput = () => {
     let output = null;
     let rangeString = '';
@@ -105,9 +81,6 @@ const Player = (props) => {
 
   let playlists = null;
   switch (props.game) {
-    case 'rocketLeague':
-      playlists = getRocketLeaguePlaylists();
-      break;
     case 'fortnite':
       playlists = getFortnitePlaylists();
       break;
@@ -124,7 +97,7 @@ const Player = (props) => {
       <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
           <span className={classes.PlayerUtilitiesLeft}>
-            <Button onClick={props.clicked ? () => props.clicked(props.player.handle) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+            <Button onClick={props.clicked ? () => props.clicked(props.player.handle, props.player.platform) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
               compare
             </Button>
           </span>

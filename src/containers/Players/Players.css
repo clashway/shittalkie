@@ -24,10 +24,6 @@ h1 {
 .ResetPlayers {
   margin-right: 10px !important;
 }
-.GameToggle {
-  margin-bottom: 9px !important;
-  margin-left: 10px !important;
-}
 .SearchField {
   padding-right: 5px !important;
 }
@@ -53,9 +49,4 @@ h1 {
   position: absolute;
   margin-top: 20px;
   margin-left: -47px;
-}
-@media screen and (min-width: 768px) {
-  .MainTitle {
-    cursor: pointer;
-  }
 }
