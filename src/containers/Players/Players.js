@@ -27,14 +27,15 @@ const mapStateToProps = state => {
 const defaultState = {
   // Handles to retrieve.
   getPlayers: [
-    { handle: 'lash24', platform: 'xbl' },
     { handle: 'lash24', platform: 'pc' },
     { handle: 'daemon chaos', platform: 'xbl' },
     { handle: 'xvhand of godvx', platform: 'xbl' },
     { handle: 'captainobvs13', platform: 'xbl' },
     { handle: 'chapper_15', platform: 'xbl' },
     { handle: 'daddyfatsacksjr', platform: 'xbl' },
-    { handle: 'ninja', platform: 'pc'},
+    { handle: 'ninja', platform: 'pc' },
+    { handle: 'not tfue', platform: 'pc'},
+
   ],
   // This will be the renderable players array.
   players: [],

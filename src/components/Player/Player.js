@@ -48,8 +48,8 @@ const Player = (props) => {
     let output = null;
     let rangeString = '';
     let nextUpdate = '';
-    let startDate = new Date(props.player.lastNight.updated);
     let endDate = new Date(props.player.currentSeason.updated);
+    let startDate = props.player.lastNight.updated ? new Date(props.player.lastNight.updated) : endDate;
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
     if (rangeString) {
       nextUpdate = moment(new Date(endDate)).add(15, 'm');
