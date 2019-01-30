@@ -203,6 +203,10 @@ class Players extends Component {
         name = 'DFS';
         handle = 'daddyfatsacksjr';
         break;
+      case 'ninja':
+        name = 'Ninja';
+        handle = 'ninja';
+        break;
       default:
         name = handle;
     }
@@ -338,10 +342,13 @@ class Players extends Component {
     this.setState({ playersLoading: true });
     switch (currentGame) {
       case 'fortnite':
-        return playersMounted.map((playerMounted, index) => {
+        return playersMounted.map(playerMounted => {
           const newPlayerPromise = this.lookupPlayer(playerMounted.handle, currentGame, playerMounted.platform);
           let self = this;
           return newPlayerPromise.then(function (newPlayer) {
+            if (!newPlayer.currentSeason) {
+              return false;
+            }
             setTimeout(function () {
               self.setState(prevState => {
                 return {

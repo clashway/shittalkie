@@ -1,8 +1,7 @@
 .Compared {
-  background-color: #9ac1e6;
+  /* background-color: #9ac1e6; */
 }
 .Card {
-  background-color: #f1f2f6 !important;
   min-height: 100%;
 }
 
@@ -32,7 +31,6 @@
 .PlayerUtilitiesRight {
   width: 33.33%;
   float: right;
-  padding-left: 10px;
   text-align: right;
 }
 .PlayerRemoveButton {
