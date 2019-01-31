@@ -6,8 +6,31 @@ import { Provider } from 'react-redux';
 import store from '../../store/index'
 
 const theme = createMuiTheme({
+  // Primary colors
   palette: {
-    type: 'dark',
+    primary: { main: '#455A64' },
+    secondary: { main: '#FDD835' },
+    contrastText: { main: '#FDD835' }
+  },
+  overrides: {
+    // Player Card
+    MuiPaper: {
+      'root': {
+        'background-color': '#B3E5FC',
+      },
+    },
+    // Search button
+    MuiButton: {
+      'containedPrimary': {
+        'color': '#fff',
+      }
+    },
+    // Player Card Cell
+    MuiTableCell: {
+      'root': {
+        'border-bottom': '1px solid rgba(0, 0, 0, 0.42)',
+      }
+    }
   },
 });
 

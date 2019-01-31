@@ -20,7 +20,7 @@ const Player = (props) => {
     if (props.playlistFilter) {
       return (
         <Grid item xs={12}>
-          <Card>
+          <Card classes={{ root: classes.PlayerCard }} raised={false}>
             <CardContent>
               <Playlist name={props.playlistFilter} playlist={props.player[displayKey][props.playlistFilter]} />
             </CardContent>
@@ -34,7 +34,7 @@ const Player = (props) => {
         return;
       }
       playlists.push(<Grid item xs={6} sm={itemSize} key={playlistKey}>
-        <Card classes={{ root: classes.Card }} raised={false}>
+        <Card classes={{ root: classes.PlayerCard }} raised={false}>
           <CardContent>
             <Playlist name={playlistKey} playlist={props.player[displayKey][playlistKey]} />
           </CardContent>
@@ -47,15 +47,12 @@ const Player = (props) => {
   const getTimeOutput = () => {
     let output = null;
     let rangeString = '';
-    let nextUpdate = '';
     let endDate = new Date(props.player.currentSeason.updated);
     let startDate = props.player.lastNight.updated ? new Date(props.player.lastNight.updated) : endDate;
     rangeString = moment(startDate).calendar() + ' - ' + moment(endDate).calendar();
     if (rangeString) {
-      nextUpdate = moment(new Date(endDate)).add(15, 'm');
-      nextUpdate = moment(nextUpdate).format('hh:mma');
       output = (<Typography variant="caption" gutterBottom>
-        {rangeString} <span className={classes.NextUpdate}>(next update at {nextUpdate})</span>
+        {rangeString}
       </Typography>
       );
     }
@@ -87,7 +84,7 @@ const Player = (props) => {
     default:
   }
 
-  let playerClasses = [classes.Player];
+  let playerClasses = [];
   var isCompared = props.comparePlayers.some(function (comparePlayer) {
     if (comparePlayer.handle === props.player.handle && comparePlayer.platform === props.player.platform) {
       return true;
@@ -95,7 +92,7 @@ const Player = (props) => {
     return false;
   });
   if (props.comparePlayers && isCompared) {
-    playerClasses = [classes.Compared];
+    playerClasses.push(classes.Compared);
   }
 
   return (
@@ -103,7 +100,12 @@ const Player = (props) => {
       <Grid container spacing={16} justify="center">
         <Grid item xs={12}>
           <span className={classes.PlayerUtilitiesLeft}>
-            <Button onClick={props.clicked ? () => props.clicked(props.player.handle, props.player.platform) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+            <Button
+              onClick={props.clicked ? () => props.clicked(props.player.handle, props.player.platform) : null}
+              variant="outlined"
+              size="small"
+              color="secondary"
+              classes={{ root: classes.PlayerCompareButton }}>
               compare
             </Button>
           </span>
@@ -112,7 +114,12 @@ const Player = (props) => {
             <span className={classes.PlayerPlatform}>{platformRender}</span>
           </Typography>
           <span className={classes.PlayerUtilitiesRight}>
-            <Button onClick={props.removed ? () => props.removed(props.player.handle, props.player.platform) : null} variant="outlined" size="small" color="secondary" classes={{ root: classes.PlayerCompareButton }}>
+            <Button
+              onClick={props.removed ? () => props.removed(props.player.handle, props.player.platform) : null}
+              variant="outlined"
+              size="small"
+              color="secondary"
+              classes={{ root: classes.PlayerCompareButton }}>
               remove
             </Button>
           </span>

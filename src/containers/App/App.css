@@ -1,10 +1,11 @@
-html {
-  background-color: black;
-}
-.App {
-  background-color: black;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+body {
   text-align: center;
+  font-family: 'Burbank', serif;
+  background-color: #607D8B;
+}
+
+@font-face {
+  font-family: 'Burbank';
+  src:
+    url(../../assets/BurbankBigCondensed-Black.otf) format('opentype');
 }
