@@ -34,7 +34,7 @@ const defaultState = {
     { handle: 'chapper_15', platform: 'xbl' },
     { handle: 'daddyfatsacksjr', platform: 'xbl' },
     { handle: 'ninja', platform: 'pc' },
-    { handle: 'not tfue', platform: 'pc'},
+    // { handle: 'not tfue', platform: 'pc'},
 
   ],
   // This will be the renderable players array.
