@@ -1,7 +1,14 @@
 body {
   text-align: center;
   font-family: 'Burbank', serif;
-  background-color: #607D8B;
+  background-color: #171a21;
+  margin: 0;
+  padding: 0;
+  color: #b8b6b4;
+}
+
+h3 {
+  color: black;
 }
 
 @font-face {

@@ -29,12 +29,12 @@ const defaultState = {
   getPlayers: [
     { handle: 'lash24', platform: 'pc' },
     { handle: 'daemon chaos', platform: 'xbl' },
+    { handle: 'popofftart', platform: 'xbl' },
     { handle: 'xvhand of godvx', platform: 'xbl' },
     { handle: 'captainobvs13', platform: 'xbl' },
     { handle: 'chapper_15', platform: 'xbl' },
     { handle: 'daddyfatsacksjr', platform: 'xbl' },
     { handle: 'ninja', platform: 'pc' },
-    // { handle: 'not tfue', platform: 'pc'},
 
   ],
   // This will be the renderable players array.
@@ -188,7 +188,7 @@ class Players extends Component {
         break;
       case 'plage':
       case 'xvhand of godvx':
-        name = 'Plage';
+        name = 'Plage (sucks)';
         handle = 'xvhand of godvx';
         break;
       case 'chap':
@@ -206,6 +206,10 @@ class Players extends Component {
       case 'ninja':
         name = 'Ninja';
         handle = 'ninja';
+        break;
+      case 'popofftart':
+        name = 'PopTart';
+        handle = 'popofftart';
         break;
       default:
         name = handle;
@@ -437,8 +441,8 @@ class Players extends Component {
             />
             <Button
               classes={{ root: buttonClasses.join(' ') }}
-              variant="contained"
-              color="primary"
+              variant="outlined"
+              color="secondary"
               disabled={this.state.submitLoading}
               onClick={this.addPlayerHandler}>
               Add
